@@ -4,6 +4,7 @@ package lesson2.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -84,14 +85,9 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val s = t1 * v1 + v2 * t2 + v3 * t3
-    if (0.5 * s - v1 * t1 <= 0) (s / 2 * v1) else {
-        if ((0.5 * s - v1 * t1) - v2 * t2 <= 0) (0.5 * s - v1 * t1) / v2 + t1 else {
-            return (0.5 * s - v1 * t1 - v2 * t2) / v3 + t1 + t2
-
-        }
-    }
-    return 1.0
-
+    if (0.5 * s - v1 * t1 <= 0) return (s / (2 * v1))
+    else if ((0.5 * s - v1 * t1) - v2 * t2 <= 0) return ((0.5 * s - v1 * t1) / v2 + t1)
+    else return ((0.5 * s - v1 * t1 - v2 * t2) / v3 + t1 + t2)
 }
 
 /**
@@ -107,7 +103,14 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int {
+    return when {
+        (kingX == rookX1 || kingY == rookY1) && (rookX2 == kingX || rookY2 == kingY) -> 3
+        (kingX == rookX1 || kingY == rookY1) -> 1
+        (kingX == rookX2 || kingY == rookY2) -> 2
+        else -> 0
+    }
+}
 
 /**
  * Простая
@@ -119,11 +122,20 @@ fun whichRookThreatens(
  * и 3, если угроза есть и от ладьи и от слона.
  * Считать, что ладья и слон не могут загораживать друг друга.
  */
+
+
 fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int {
+    return when {
+        (kingX == rookX || kingY == rookY) && abs(bishopX - kingX) == abs(bishopY - kingY) -> 3
+        (kingX == rookX || kingY == rookY) -> 1
+        abs(bishopX - kingX) == abs(bishopY - kingY) -> 2
+        else -> 0
+    }
+}
 
 /**
  * Простая
