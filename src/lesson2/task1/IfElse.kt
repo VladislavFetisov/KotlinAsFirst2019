@@ -146,24 +146,6 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    if ((c > a && c > b) && a + b > c) {
-        if (sqr(c) == sqr(a) + sqr(b)) return 1
-        else if (sqr(c) > sqr(a) + sqr(b)) return 2
-        else if (sqr(c) < sqr(a) + sqr(b)) return 0
-
-    } else if ((a > c && a > b) && b + c > a) {
-        if (sqr(c) == sqr(a) + sqr(b)) return 1
-        else if (sqr(a) > sqr(c) + sqr(b)) return 2
-        else if (sqr(a) < sqr(c) + sqr(b)) return 0
-
-    } else if ((b > a && b > c) && a + c > b) {
-        if (sqr(b) == sqr(a) + sqr(c)) return 1
-        else if (sqr(b) > sqr(a) + sqr(c)) return 2
-        else if (sqr(b) < sqr(a) + sqr(c)) return 0
-
-    }
-    return -1
-}
 
 /**
  * Средняя
