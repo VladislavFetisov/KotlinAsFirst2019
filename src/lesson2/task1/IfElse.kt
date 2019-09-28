@@ -68,7 +68,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
 fun ageDescription(age: Int): String =
     if (age % 10 == 1 && age % 100 != 11) ("$age год")
     else if (age % 10 in 2..4 && age % 100 !in 12..14) ("$age года")
-    else if (age % 10 in 5..9 || age % 100 in 10..20) ("$age лет")
+    else if (age % 10 in 5..9 || age % 100 in 11..19 || age % 10 == 0) ("$age лет")
     else "Double.NaN"
 
 
@@ -85,9 +85,11 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val s = t1 * v1 + v2 * t2 + v3 * t3
-    if (0.5 * s - v1 * t1 <= 0) return (s / (2 * v1))
-    else if ((0.5 * s - v1 * t1) - v2 * t2 <= 0) return ((0.5 * s - v1 * t1) / v2 + t1)
-    else return ((0.5 * s - v1 * t1 - v2 * t2) / v3 + t1 + t2)
+    return when {
+        (0.5 * s - v1 * t1 <= 0) -> (s / (2 * v1))
+        ((0.5 * s - v1 * t1) - v2 * t2 <= 0) -> ((0.5 * s - v1 * t1) / v2 + t1)
+        else -> ((0.5 * s - v1 * t1 - v2 * t2) / v3 + t1 + t2)
+    }
 }
 
 /**
@@ -103,14 +105,14 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int {
-    return when {
+): Int =
+    when {
         (kingX == rookX1 || kingY == rookY1) && (rookX2 == kingX || rookY2 == kingY) -> 3
         (kingX == rookX1 || kingY == rookY1) -> 1
         (kingX == rookX2 || kingY == rookY2) -> 2
         else -> 0
     }
-}
+
 
 /**
  * Простая
@@ -128,14 +130,14 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int {
-    return when {
+): Int =
+    when {
         (kingX == rookX || kingY == rookY) && abs(bishopX - kingX) == abs(bishopY - kingY) -> 3
         (kingX == rookX || kingY == rookY) -> 1
         abs(bishopX - kingX) == abs(bishopY - kingY) -> 2
         else -> 0
     }
-}
+
 
 /**
  * Простая
@@ -148,19 +150,25 @@ fun rookOrBishopThreatens(
 fun triangleKind(a: Double, b: Double, c: Double): Int =
     if (a > b + c || b > a + c || c > a + b) -1
     else if (c >= a && c >= b) {
-        if (sqr(c) == sqr(a) + sqr(b)) 1
-        else if (sqr(c) > sqr(a) + sqr(b)) 2
-        else 0
+        when {
+            sqr(c) == sqr(a) + sqr(b) -> 1
+            sqr(c) > sqr(a) + sqr(b) -> 2
+            else -> 0
+        }
 
     } else if (a >= c && a >= b) {
-        if (sqr(a) == sqr(c) + sqr(b)) 1
-        else if (sqr(a) > sqr(c) + sqr(b)) 2
-        else 0
+        when {
+            sqr(a) == sqr(c) + sqr(b) -> 1
+            sqr(a) > sqr(c) + sqr(b) -> 2
+            else -> 0
+        }
 
     } else {
-        if (sqr(b) == sqr(a) + sqr(c)) 1
-        else if (sqr(b) > sqr(a) + sqr(c)) 2
-        else 0
+        when {
+            sqr(b) == sqr(a) + sqr(c) -> 1
+            sqr(b) > sqr(a) + sqr(c) -> 2
+            else -> 0
+        }
 
     }
 
