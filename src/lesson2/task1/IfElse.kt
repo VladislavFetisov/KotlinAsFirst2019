@@ -148,28 +148,23 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int =
-    if (a > b + c || b > a + c || c > a + b) -1
-    else if (c >= a && c >= b) {
-        when {
+    when {
+        a > b + c || b > a + c || c > a + b -> -1
+        c >= a && c >= b -> when {
             sqr(c) == sqr(a) + sqr(b) -> 1
             sqr(c) > sqr(a) + sqr(b) -> 2
             else -> 0
         }
-
-    } else if (a >= c && a >= b) {
-        when {
+        a >= c && a >= b -> when {
             sqr(a) == sqr(c) + sqr(b) -> 1
             sqr(a) > sqr(c) + sqr(b) -> 2
             else -> 0
         }
-
-    } else {
-        when {
+        else -> when {
             sqr(b) == sqr(a) + sqr(c) -> 1
             sqr(b) > sqr(a) + sqr(c) -> 2
             else -> 0
         }
-
     }
 
 

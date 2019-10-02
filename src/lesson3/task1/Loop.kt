@@ -70,7 +70,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var i = 0
-    var x: Int = n
+    var x = n
     do {
         x /= 10
         i++
@@ -85,7 +85,19 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = if (n < 3) 1 else fib(n - 2) + fib(n - 1)
+fun fib(n: Int): Int {
+    var a = 1
+    var b = 1
+    var c = 1
+    var i = 2
+    while (i < n) {
+        c = a + b
+        a = b
+        b = c
+        i++
+    }
+    return c
+}
 
 /**
  * Простая
@@ -95,10 +107,7 @@ fun fib(n: Int): Int = if (n < 3) 1 else fib(n - 2) + fib(n - 1)
  */
 fun lcm(m: Int, n: Int): Int {
     var k = max(m, n)
-    while (k != m * n + 1) {
-        if (k % m == 0 && k % n == 0) break
-        else k++
-    }
+    while (k % m != 0 || k % n != 0) k++
     return k
 }
 
@@ -110,7 +119,8 @@ fun lcm(m: Int, n: Int): Int {
 fun minDivisor(n: Int): Int {
     var d = 2
     while (n % d != 0) {
-        d++
+        if (n % 2 == 0) d += 2
+        else d++
     }
     return d
 }
@@ -147,7 +157,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var k = 1
+    var k = 0
     while (k * 1.0 !in sqrt(m * 1.0)..sqrt(n * 1.0)) {
         k++
         if (k > sqrt(n * 1.0)) {
@@ -175,11 +185,11 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * этого для какого-либо начального X > 0.
  */
 fun collatzSteps(x: Int): Int {
-    var X = x
+    var v = x
     var count = 0
-    while (X != 1) {
-        if (X % 2 != 0) X = 3 * X + 1
-        else X /= 2
+    while (v != 1) {
+        if (v % 2 != 0) v = 3 * v + 1
+        else v /= 2
         count++
     }
     return count
@@ -218,7 +228,7 @@ fun revert(n: Int): Int {
     var m = 0
     var x = n
     var count = log10(n * 1.0).toInt()
-    while (x > 10) {
+    while (x >= 10) {
         m += (x % 10) * 10.0.pow(count).toInt()
         x /= 10
         count -= 1
@@ -249,7 +259,7 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
 fun hasDifferentDigits(n: Int): Boolean {
     var x = n
     if (n < 10) return false
-    else while (x > 10) {
+    while (x > 10) {
         if (x % 10 == x % 100 / 10) x /= 10
         else break
     }
