@@ -106,9 +106,14 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = max(m, n)
-    while (k % m != 0 || k % n != 0) k++
-    return k
+    var a = max(m, n)
+    var b = min(m, n)
+    while (a % b != 0) {
+        val c = a % b
+        a = b
+        b = c
+    }
+    return m * n / b
 }
 
 /**
@@ -117,10 +122,13 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var d = 2
-    while (n % d != 0) {
-        if (n % 2 == 0) d += 2
-        else d++
+    var d = 3
+    when {
+        isPrime(n) -> return n
+        n % 2 == 0 -> return 2
+        else -> while (n % d != 0) {
+            d += 2
+        }
     }
     return d
 }
@@ -139,14 +147,7 @@ fun maxDivisor(n: Int): Int = n / minDivisor(n)
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var x = 2
-    while (x != max(m, n)) {
-        if (m % x == 0 && n % x == 0) break
-        else x++
-    }
-    return x == max(m, n)
-}
+fun isCoPrime(m: Int, n: Int): Boolean = lcm(m, n) == m * n
 
 
 /**
