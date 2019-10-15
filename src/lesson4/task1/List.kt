@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.digitNumber
 import lesson3.task1.minDivisor
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -234,7 +235,7 @@ fun factorize(n: Int): List<Int> {
  */
 fun factorizeToString(n: Int): String {
     val s = factorize(n)
-    var z: String = "${s[0]}"
+    var z = "${s[0]}"
     for (i in 1 until s.size) {
         z += "*${s[i]}"
     }
@@ -381,59 +382,64 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    var res = ""
-    var z = n
-    while (z != 0) {
-        when (z / 100) {
-            1 -> res += "сто"
-            2 -> res += "двести"
-            3 -> res += "триста"
-            4 -> res += "четыреста"
-            5 -> res += "пятьсот"
-            6 -> res += "шестьсот"
-            7 -> res += "семьсот"
-            8 -> res += "восемьсот"
-            9 -> res += "девятьсот"
+    val res = mutableListOf<String>()
+    val u = mutableListOf(n / 1000, n % 1000)
+    for (i in 0..1) {
+        while (u[i] != 0) {
+            when (u[i] / 100) {
+                1 -> res += "сто"
+                2 -> res += "двести"
+                3 -> res += "триста"
+                4 -> res += "четыреста"
+                5 -> res += "пятьсот"
+                6 -> res += "шестьсот"
+                7 -> res += "семьсот"
+                8 -> res += "восемьсот"
+                9 -> res += "девятьсот"
+            }
+            u[i] %= 100
+            when (u[i]) {
+                10 -> res += "десять"
+                11 -> res += "одиннадцать"
+                12 -> res += "двенадцать"
+                13 -> res += "тринадцать"
+                14 -> res += "четырнадцать"
+                15 -> res += "пятнадцать"
+                16 -> res += "шестнадцать"
+                17 -> res += "семнадцать"
+                18 -> res += "восемнадцать"
+                19 -> res += "девятнадцать"
+            }
+            if (u[i] in 10..19) break
+            when (u[i] / 10) {
+                2 -> res += "двадцать"
+                3 -> res += "тридцать"
+                4 -> res += "сорок"
+                5 -> res += "пятьдесят"
+                6 -> res += "шестьдесят"
+                7 -> res += "семьдесят"
+                8 -> res += "восемьдесят"
+                9 -> res += "девяносто"
+            }
+            u[i] %= 10
+            when (u[i]) {
+                1 -> res += if (i == 0) "одна" else "один"
+                2 -> res += if (i == 0) "две" else "два"
+                3 -> res += if (i == 0) "три" else "три"
+                4 -> res += if (i == 0) "четыре" else "четыре"
+                5 -> res += "пять"
+                6 -> res += "шесть"
+                7 -> res += "семь"
+                8 -> res += "восемь"
+                9 -> res += "девять"
+            }
+            break
         }
-        z %= 100
-        when (z) {
-            10 -> res += "десять"
-            11 -> res += "одиннадцать"
-            12 -> res += "двенадцать"
-            13 -> res += "тринадцать"
-            14 -> res += "четырнадцать"
-            15 -> res += "пятнадцать"
-            16 -> res += "шестнадцать"
-            17 -> res += "семнадцать"
-            18 -> res += "восемнадцать"
-            19 -> res += "девятнадцать"
-
+        if (i == 0 && n / 1000 != 0) res += when {
+            u[i] == 1 -> "тысяча"
+            u[i] in 2..4 -> "тысячи"
+            else -> "тысяч"
         }
-        when (z / 10) {
-            2 -> res += "двадцать"
-            3 -> res += "тридцать"
-            4 -> res += "сорок"
-            5 -> res += "пятьдесят"
-            6 -> res += "шестьдесят"
-            7 -> res += "семьдесят"
-            8 -> res += "восемьдесят"
-            9 -> res += "девяносто"
-        }
-        z %= 10
-        when (z) {
-            1 -> res += "один"
-            2 -> res += "два"
-            3 -> res += "три"
-            4 -> res += "четыре"
-            5 -> res += "пять"
-            6 -> res += "шесть"
-            7 -> res += "семь"
-            8 -> res += "восемь"
-            9 -> res += "девять"
-        }
-        break
-
-
     }
-    return res
+    return res.joinToString(separator = " ")
 }
