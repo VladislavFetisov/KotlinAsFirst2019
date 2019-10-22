@@ -5,6 +5,8 @@ package lesson4.task1
 import lesson1.task1.discriminant
 import lesson3.task1.digitNumber
 import lesson3.task1.minDivisor
+import java.lang.StringBuilder
+import javax.swing.JToolBar
 import kotlin.math.abs
 import kotlin.math.sqrt
 import kotlin.math.*
@@ -120,7 +122,6 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * Модуль пустого вектора считать равным 0.0.
  */
 fun abs(v: List<Double>): Double {
-    if (v.isEmpty()) return 0.0
     var z = 0.0
     for (element in v.map { it * it }) z += element
     return abs(sqrt(z))
@@ -163,12 +164,9 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int {
-    if (a.isEmpty() || b.isEmpty()) return 0
     var z = 0
-    val c = a + b
-    for (i in c.indices) {
-        z += c[i] * c[(c.size - 1) / 2.0.toInt() + i + 1]
-        if (i == (c.size - 1) / 2.0.toInt()) break
+    for (i in a.indices) {
+        z += a[i] * b[i]
     }
     return z
 }
@@ -183,9 +181,11 @@ fun times(a: List<Int>, b: List<Int>): Int {
  */
 fun polynom(p: List<Int>, x: Int): Int {
     if (p.isEmpty()) return 0
+    var c = x
     var sum = p[0]
     for (i in 1 until p.size) {
-        sum += p[i] * x.toDouble().pow(i).toInt()
+        sum += p[i] * c
+        c *= x
     }
     return sum
 }
@@ -233,14 +233,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    val s = factorize(n)
-    var z = "${s[0]}"
-    for (i in 1 until s.size) {
-        z += "*${s[i]}"
-    }
-    return z
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя
@@ -273,41 +266,12 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     val k = convert(n, base)
-    var m = ""
+    val m = StringBuilder()
     for (i in k.indices) {
-        if (k[i] <= 9) m += "${k[i]}"
-        else {
-            when {
-                k[i] == 10 -> m += 'a'
-                k[i] == 11 -> m += 'b'
-                k[i] == 12 -> m += 'c'
-                k[i] == 13 -> m += 'd'
-                k[i] == 14 -> m += 'e'
-                k[i] == 15 -> m += 'f'
-                k[i] == 16 -> m += 'g'
-                k[i] == 17 -> m += 'h'
-                k[i] == 18 -> m += 'i'
-                k[i] == 19 -> m += 'j'
-                k[i] == 20 -> m += 'k'
-                k[i] == 21 -> m += 'l'
-                k[i] == 22 -> m += 'm'
-                k[i] == 23 -> m += 'n'
-                k[i] == 24 -> m += 'o'
-                k[i] == 25 -> m += 'p'
-                k[i] == 26 -> m += 'q'
-                k[i] == 27 -> m += 'r'
-                k[i] == 28 -> m += 's'
-                k[i] == 29 -> m += 't'
-                k[i] == 30 -> m += 'u'
-                k[i] == 31 -> m += 'v'
-                k[i] == 32 -> m += 'w'
-                k[i] == 33 -> m += 'x'
-                k[i] == 34 -> m += 'y'
-                k[i] == 35 -> m += 'z'
-            }
-        }
+        if (k[i] <= 9) m.append("${k[i]}")
+        else m.append((87 + k[i]).toChar())
     }
-    return m
+    return m.toString()
 }
 
 /**
