@@ -3,13 +3,10 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import lesson3.task1.digitNumber
 import lesson3.task1.minDivisor
 import java.lang.StringBuilder
-import javax.swing.JToolBar
-import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
-import kotlin.math.*
 
 /**
  * Пример
@@ -121,11 +118,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    var z = 0.0
-    for (element in v.map { it * it }) z += element
-    return abs(sqrt(z))
-}
+fun abs(v: List<Double>): Double = sqrt(v.fold(0.0) { total, next -> next * next + total })
 
 /**
  * Простая
@@ -282,11 +275,11 @@ fun convertToString(n: Int, base: Int): String {
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int {
-    var num = 0
-    var z = 0
-    for (i in digits.size - 1 downTo 0) {
-        num += digits[i] * base.toDouble().pow(z).toInt()
-        z += 1
+    var num = digits[digits.size - 1]
+    var x = base
+    for (i in digits.size - 2 downTo 0) {
+        num += digits[i] * x
+        x *= base
     }
     return num
 }
@@ -311,7 +304,6 @@ fun decimalFromString(str: String, base: Int): Int {
     }
     return res
 }
-
 /**
  * Сложная
  *
@@ -321,22 +313,23 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var k = ""
-    for (i in 1..n) k += 'I'
-    return k.replace("IIIII", "V")
-        .replace("IIII", "IV")
-        .replace("VV", "X")
-        .replace("VIV", "IX")
-        .replace("XXXXX", "L")
-        .replace("XXXX", "XL")
-        .replace("LL", "C")
-        .replace("LXL", "XC")
-        .replace("CCCCC", "D")
-        .replace("CCCC", "CD")
-        .replace("DD", "M")
-        .replace("DCD", "CM")
+    val res = StringBuilder()
+    var i = 0
+    var c = n
+    val nouns = mutableListOf<String>(
+        "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"
+    )
+    val numbers = mutableListOf<Int>(
+        1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1
+    )
+    while (c > 0) {
+        if (c >= numbers[i]) {
+            c -= numbers[i]
+            res.append(nouns[i])
+        } else i++
+    }
+    return res.toString()
 }
-
 
 /**
  * Очень сложная
