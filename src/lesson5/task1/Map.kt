@@ -154,7 +154,6 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     for (i in a.toSet())
         if (i in b.toSet()) res.add(i)
     return res
-
 }
 
 
@@ -256,7 +255,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     for (i in word.toLowerCase().toSet())
-        if (i !in chars.toSet()) return false
+        if (i !in chars.toString().toLowerCase().toList()) return false
     return true
 }
 
