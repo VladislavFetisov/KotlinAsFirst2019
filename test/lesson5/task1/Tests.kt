@@ -232,14 +232,24 @@ class Tests {
     @Test
     @Tag("Normal")
     fun canBuildFrom() {
+        assertTrue(canBuildFrom(listOf(), ""))
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
+        assertTrue(canBuildFrom(listOf('a', 'b', 'o', 's'), "baobab"))
     }
 
     @Test
     @Tag("Normal")
     fun extractRepeats() {
+        assertEquals(
+            mapOf("" to 10, "a" to 2),
+            extractRepeats(listOf("a", "b", "a", "", "", "", "", "", "", "", "", "", ""))
+        )
+        assertEquals(
+            mapOf("a" to 5, "b" to 5),
+            extractRepeats(listOf("a", "b", "a", "a", "a", "a", "b", "b", "b", "b"))
+        )
         assertEquals(
             emptyMap<String, Int>(),
             extractRepeats(emptyList())
@@ -257,6 +267,7 @@ class Tests {
     @Test
     @Tag("Normal")
     fun hasAnagrams() {
+        assertTrue(hasAnagrams(listOf("", "свет", "тор")))
         assertFalse(hasAnagrams(emptyList()))
         assertTrue(hasAnagrams(listOf("рот", "свет", "тор")))
         assertFalse(hasAnagrams(listOf("рот", "свет", "код", "дверь")))

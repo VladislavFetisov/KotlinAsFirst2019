@@ -151,20 +151,19 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMa
  */
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     val res = mutableListOf<String>()
-    for (i in a.indices) {
-        for (j in b.indices) {
-            if (a[i] == b[j] && a[i] !in res) res += a[i]
-        }
-    }
+    for (i in a.toSet())
+        if (i in b.toSet()) res.add(i)
     return res
+
 }
+
 
 /**
  * Средняя
  *
  * Объединить два ассоциативных массива `mapA` и `mapB` с парами
  * "имя"-"номер телефона" в итоговый ассоциативный массив, склеивая
- * значения для повторяющихся ключей через запятую.
+ * значения для повторщияюхся ключей через запятую.
  * В случае повторяющихся *ключей* значение из mapA должно быть
  * перед значением из mapB.
  *
@@ -253,15 +252,14 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * указанное слово (регистр символов игнорируется)
  *
  * Например:
- *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
+ *   canBuildFrom(listOf('a', 'b', 'o' ), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    if (chars.isEmpty()) return false
-    for (i in chars) {
-        if (i !in word.toList()) return false
-    }
+    for (i in word.toLowerCase().toSet())
+        if (i !in chars.toSet()) return false
     return true
 }
+
 
 /**
  * Средняя
@@ -279,13 +277,15 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
     var c = 1
     val res = mutableMapOf<String, Int>()
     for (i in list.indices) {
-        for (j in (i + 1) until list.size) if (list[i] == list[j]) {
+        if (list[i] !in res) for (j in (i + 1) until list.size) if (list[i] == list[j]) {
             c++
             res[list[i]] = c
         }
+        c = 1
     }
     return res
 }
+
 
 /**
  * Средняя
@@ -297,7 +297,6 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    if (words.isEmpty()) return false
     for (i in words.indices)
         for (j in words.indices) {
             if (i != j && canBuildFrom(words[i].toList(), words[j])) return true

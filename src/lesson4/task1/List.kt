@@ -297,13 +297,15 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var res = 0
-    for ((k, i) in (str.length - 1 downTo 0).withIndex()) {
-        if (str[i].toInt() <= 57) res += (str[i].toInt() - 48) * base.toDouble().pow(k).toInt()
-        if (str[i].toInt() >= 97) res += (str[i].toInt() - 87) * base.toDouble().pow(k).toInt()
+    val z = str.toMutableList()
+    val res = mutableListOf<Int>()
+    for (element in z) {
+        if (element.toInt() >= 97) res += element.toInt() - 87
+        if (element.toInt() <= 57) res += element.toInt() - 48
     }
-    return res
+    return decimal(res, base)
 }
+
 /**
  * Сложная
  *
@@ -316,10 +318,10 @@ fun roman(n: Int): String {
     val res = StringBuilder()
     var i = 0
     var c = n
-    val nouns = mutableListOf<String>(
+    val nouns = mutableListOf(
         "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"
     )
-    val numbers = mutableListOf<Int>(
+    val numbers = mutableListOf(
         1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1
     )
     while (c > 0) {
