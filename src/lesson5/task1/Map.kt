@@ -223,7 +223,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): MutableMap<Strin
  *
  * Например:
  *   findCheapestStuff(
- *     mapOf("Мария" to ("печенье" to 20.0), "Орео" to ("печенье" to 100.0)),
+ *     mapOf("Мария" to ("печенье" to 20.0), "Орео" to ("печенье" to 100.0)),("a" to ("" to 1.7976931348623157e+308)
  *     "печенье"
  *   ) -> "Мария"
  */
@@ -236,7 +236,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     }
     if (res.isEmpty()) return null
     for ((key, value) in res) {
-        if (value.second < c) {
+        if (value.second <= c) {
             z = key
             c = value.second
         }
@@ -254,9 +254,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o' ), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    if (word.isEmpty()) return true
     for (i in word.toLowerCase().toSet())
-        if (i !in chars.toString().toLowerCase().toList()) return false
-    return true
+        if (i !in chars.toString().toLowerCase()) return false
+    return chars.isNotEmpty()
 }
 
 

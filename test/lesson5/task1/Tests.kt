@@ -217,7 +217,7 @@ class Tests {
         assertEquals(
             "a",
             findCheapestStuff(
-                mapOf("a" to ("" to 1.7976931348623157e+308), "" to ("a" to 0.0)),
+                mapOf("a" to ("" to 1.7976931348623157e+308)),
                 ""
             )
         )
@@ -239,6 +239,7 @@ class Tests {
     @Test
     @Tag("Normal")
     fun canBuildFrom() {
+        assertFalse(canBuildFrom(emptyList(), "]"))
         assertTrue(canBuildFrom(listOf('O'), "o"))
         assertTrue(canBuildFrom(listOf(), ""))
         assertFalse(canBuildFrom(emptyList(), "foo"))
