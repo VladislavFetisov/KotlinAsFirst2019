@@ -239,6 +239,7 @@ class Tests {
     @Test
     @Tag("Normal")
     fun canBuildFrom() {
+        assertFalse(canBuildFrom(listOf('a'), "]"))
         assertFalse(canBuildFrom(emptyList(), "]"))
         assertTrue(canBuildFrom(listOf('O'), "o"))
         assertTrue(canBuildFrom(listOf(), ""))
@@ -318,9 +319,10 @@ class Tests {
     @Test
     @Tag("Hard")
     fun findSumOfTwo() {
+
         assertEquals(
-            Pair(-1, -1),
-            findSumOfTwo(emptyList(), 1)
+            Pair(0, 2),
+            findSumOfTwo(listOf(2, 3, 2), 4)
         )
         assertEquals(
             Pair(0, 2),
@@ -328,7 +330,16 @@ class Tests {
         )
         assertEquals(
             Pair(-1, -1),
+            findSumOfTwo(emptyList(), 1)
+        )
+
+        assertEquals(
+            Pair(-1, -1),
             findSumOfTwo(listOf(1, 2, 3), 6)
+        )
+        assertEquals(
+            Pair(0, 2),
+            findSumOfTwo(listOf(2, 3, 2), 4)
         )
     }
 
