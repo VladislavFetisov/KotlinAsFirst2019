@@ -287,7 +287,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean =
-    (words.size != words.map { it.toSortedSet() }.toSet().size) || words.contains("")
+    (words.size != words.map { it.toSortedSet() }.toSet().size) || (words.contains("") && words.size > 1)
 
 /**
  * Сложная
