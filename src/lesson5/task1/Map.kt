@@ -133,12 +133,8 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMap<String, String> {
-    val res = mutableListOf<String>()
-    for ((key, value) in a) {
-        for ((key1, value1) in b)
-            if (key == key1 && value == value1) res += key
-    }
-    a -= res
+    for ((key) in b)
+        if (a[key] == b[key]) a.remove(key)
     return a
 }
 
@@ -151,8 +147,9 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMa
  */
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     val res = mutableListOf<String>()
+    b.toSet()
     for (i in a.toSet())
-        if (i in b.toSet()) res.add(i)
+        if (i in b) res.add(i)
     return res
 }
 
@@ -198,13 +195,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): MutableMap<Strin
     val count = mutableMapOf<String, Int>()
     val it = mutableMapOf<String, Double>()
     for ((first, second) in stockPrices) {
-        if (first !in res) {
-            res[first] = second
-            count[first] = 1
-        } else {
-            res[first] = res.getOrDefault(first, 0.0) + second
-            count[first] = count.getOrDefault(first, 0) + 1
-        }
+        res[first] = res.getOrDefault(first, 0.0) + second
+        count[first] = count.getOrDefault(first, 0) + 1
     }
     for ((key) in res) {
         it[key] = res[key]!! / count[key]!!
@@ -230,12 +222,12 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): MutableMap<Strin
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var z = ""
     var c = Double.MAX_VALUE
-    val res = mutableMapOf<String, Pair<String, Double>>()
-    for (i in stuff) {
-        if (i.value.first == kind) res += i.toPair()
+    val m = mutableListOf<String>()
+    for ((key, value) in stuff.toMutableMap()) {
+        if (value.first != kind) m += key
     }
-    if (res.isEmpty()) return null
-    for ((key, value) in res) {
+    if ((stuff - m).isEmpty()) return null
+    for ((key, value) in stuff - m) {
         if (value.second <= c) {
             z = key
             c = value.second
@@ -255,8 +247,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     if (word.isEmpty()) return true
-    for (i in word.toLowerCase().toSet())
-        if (i !in chars.toString().toLowerCase()) return false
+    for (i in word.toLowerCase().toSet()) {
+        val k = chars.map { it.toLowerCase() }
+        if (i !in k) return false
+    }
     return chars.isNotEmpty()
 }
 
@@ -274,14 +268,10 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    var c = 1
     val res = mutableMapOf<String, Int>()
     for (i in list.indices) {
-        if (list[i] !in res) for (j in (i + 1) until list.size) if (list[i] == list[j]) {
-            c++
-            res[list[i]] = c
-        }
-        c = 1
+        if (list[i] in list.subList(i + 1, list.size).toSet())
+            res[list[i]] = res.getOrDefault(list[i], 1) + 1
     }
     return res
 }
@@ -296,13 +286,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  * Например:
  *hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean {
-    for (i in words.indices)
-        for (j in words.indices) {
-            if (i != j && canBuildFrom(words[i].toList(), words[j])) return true
-        }
-    return false
-}
+fun hasAnagrams(words: List<String>): Boolean =
+    (words.size != words.map { it.toSortedSet() }.toSet().size) || words.contains("")
 
 /**
  * Сложная

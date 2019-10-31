@@ -318,7 +318,7 @@ fun roman(n: Int): String {
     val res = StringBuilder()
     var i = 0
     var c = n
-    val nouns = mutableListOf(
+    val romans = mutableListOf(
         "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"
     )
     val numbers = mutableListOf(
@@ -327,7 +327,7 @@ fun roman(n: Int): String {
     while (c > 0) {
         if (c >= numbers[i]) {
             c -= numbers[i]
-            res.append(nouns[i])
+            res.append(romans[i])
         } else i++
     }
     return res.toString()
