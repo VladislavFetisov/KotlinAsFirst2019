@@ -2,7 +2,6 @@
 
 package lesson5.task1
 
-import lesson1.task1.seconds
 
 /**
  * Пример
@@ -133,7 +132,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMap<String, String> {
-    for ((key) in b)
+    for ((key, _) in b)
         if (a[key] == b[key]) a.remove(key)
     return a
 }
@@ -147,7 +146,6 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMa
  */
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     val res = mutableListOf<String>()
-    b.toSet()
     for (i in a.toSet())
         if (i in b) res.add(i)
     return res
@@ -198,8 +196,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): MutableMap<Strin
         res[first] = res.getOrDefault(first, 0.0) + second
         count[first] = count.getOrDefault(first, 0) + 1
     }
-    for ((key) in res) {
-        it[key] = res[key]!! / count[key]!!
+    for ((key, value) in res) {
+        it[key] = value / count[key]!!
     }
     return it
 }
@@ -247,7 +245,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     if (word.isEmpty()) return true
-    for (i in word.toLowerCase().toSet()) {
+    for (i in word.toLowerCase()) {
         val k = chars.map { it.toLowerCase() }
         if (i !in k) return false
     }

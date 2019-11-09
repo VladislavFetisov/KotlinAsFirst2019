@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.isPrime
 import lesson3.task1.minDivisor
 import java.lang.StringBuilder
 import kotlin.math.pow
@@ -210,11 +211,14 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
 fun factorize(n: Int): List<Int> {
     var z = n
     val res = mutableListOf<Int>()
-    while (z != 1) {
-        val m = minDivisor(z)
-        res += m
-        z /= m
-    }
+    var count = 2
+    if (isPrime(n)) return listOf(n)
+    while (z != 1)
+        if (z % count == 0) {
+            res.add(count)
+            z /= count
+        } else count++
+
     return res
 }
 
@@ -262,7 +266,7 @@ fun convertToString(n: Int, base: Int): String {
     val m = StringBuilder()
     for (i in k.indices) {
         if (k[i] <= 9) m.append("${k[i]}")
-        else m.append((87 + k[i]).toChar())
+        else m.append('a' + k[i] - 10)
     }
     return m.toString()
 }
