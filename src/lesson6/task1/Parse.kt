@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.lang.Error
 import java.util.regex.Pattern
 
 /**
@@ -71,42 +73,32 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
+val months = listOf(
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря"
+)
+
 fun dateStrToDigit(str: String): String {
-    val line = str.split(" ")
     try {
-        if (line[0].toInt() < 32 && line.size == 3) return when {
-            (line[1] == "января") -> String.format("%02d.%02d.%d", line[0].toInt(), 1, line[2].toInt())
-            (line[1] == "февраля" && leapYear(line[2].toInt()) && line[0].toInt() <= 29) -> String.format(
-                "%02d.%02d.%d",
-                line[0].toInt(),
-                2,
-                line[2].toInt()
-            )
-            (line[1] == "февраля" && !leapYear(line[2].toInt()) && line[0].toInt() <= 28) -> String.format(
-                "%02d.%02d.%d",
-                line[0].toInt(),
-                2,
-                line[2].toInt()
-            )
-            (line[1] == "марта") -> String.format("%02d.%02d.%d", line[0].toInt(), 3, line[2].toInt())
-            (line[1] == "апреля") -> String.format("%02d.%02d.%d", line[0].toInt(), 4, line[2].toInt())
-            (line[1] == "мая") -> String.format("%02d.%02d.%d", line[0].toInt(), 5, line[2].toInt())
-            (line[1] == "июня") -> String.format("%02d.%02d.%d", line[0].toInt(), 6, line[2].toInt())
-            (line[1] == "июля") -> String.format("%02d.%02d.%d", line[0].toInt(), 7, line[2].toInt())
-            (line[1] == "августа") -> String.format("%02d.%02d.%d", line[0].toInt(), 8, line[2].toInt())
-            (line[1] == "сентября") -> String.format("%02d.%02d.%d", line[0].toInt(), 9, line[2].toInt())
-            (line[1] == "октября") -> String.format("%02d.%02d.%d", line[0].toInt(), 10, line[2].toInt())
-            (line[1] == "ноября") -> String.format("%02d.%02d.%d", line[0].toInt(), 11, line[2].toInt())
-            (line[1] == "декабря") -> String.format("%02d.%02d.%d", line[0].toInt(), 12, line[2].toInt())
-            else -> ""
-        }
-        return ""
+        val line = str.split(" ")
+        if (line.size != 3 || line[0].toInt() < 1) return ""
+        val month = months.indexOf(line[1]) + 1
+        if (daysInMonth(month, line[2].toInt()) < line[0].toInt() || month == 0) return ""
+        return String.format("%02d.%02d.%d", line[0].toInt(), month, line[2].toInt())
     } catch (e: NumberFormatException) {
         return ""
     }
 }
-
-fun leapYear(year: Int): Boolean = (year % 4 == 0 && year % 100 != 0 || year % 400 == 0)
 
 /**
  * Средняя
@@ -119,38 +111,17 @@ fun leapYear(year: Int): Boolean = (year % 4 == 0 && year % 100 != 0 || year % 4
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    val line = digital.split(".")
     try {
-        if (line[0].toInt() < 32 && line.size == 3) return when {
-            line[1] == "01" -> String.format("%d %s %d", line[0].toInt(), "января", line[2].toInt())
-            line[1] == "02" && leapYear(line[2].toInt()) && line[0].toInt() <= 29 -> String.format(
-                "%d %s %d",
-                line[0].toInt(),
-                "февраля",
-                line[2].toInt()
-            )
-            line[1] == "02" && !leapYear(line[2].toInt()) && line[0].toInt() <= 28 -> String.format(
-                "%d %s %d",
-                line[0].toInt(),
-                "февраля",
-                line[2].toInt()
-            )
-            line[1] == "03" -> String.format("%d %s %d", line[0].toInt(), "марта", line[2].toInt())
-            line[1] == "04" -> String.format("%d %s %d", line[0].toInt(), "апреля", line[2].toInt())
-            line[1] == "05" -> String.format("%d %s %d", line[0].toInt(), "мая", line[2].toInt())
-            line[1] == "06" -> String.format("%d %s %d", line[0].toInt(), "июня", line[2].toInt())
-            line[1] == "07" -> String.format("%d %s %d", line[0].toInt(), "июля", line[2].toInt())
-            line[1] == "08" -> String.format("%d %s %d", line[0].toInt(), "августа", line[2].toInt())
-            line[1] == "09" -> String.format("%d %s %d", line[0].toInt(), "сентября", line[2].toInt())
-            line[1] == "10" -> String.format("%d %s %d", line[0].toInt(), "октября", line[2].toInt())
-            line[1] == "11" -> String.format("%d %s %d", line[0].toInt(), "ноября", line[2].toInt())
-            line[1] == "12" -> String.format("%d %s %d", line[0].toInt(), "декабря", line[2].toInt())
-            else -> ""
-        }
+        val line = digital.split(".")
+        if (line.size != 3 || line[0].toInt() < 1) return ""
+        val day = line[0].toInt()
+        val year = line[2].toInt()
+        val month = line[1].toInt()
+        if (daysInMonth(month, year) < day || month !in 1..12) return ""
+        return String.format("%d %s %d", day, months[month - 1], year)
     } catch (e: NumberFormatException) {
         return ""
     }
-    return ""
 }
 
 /**
@@ -188,6 +159,7 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int = TODO()
+
 
 /**
  * Сложная
@@ -236,6 +208,7 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * Все цены должны быть больше либо равны нуля.
  */
 fun mostExpensive(description: String): String = TODO()
+
 
 /**
  * Сложная
