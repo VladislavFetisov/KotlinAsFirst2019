@@ -218,18 +218,14 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): MutableMap<Strin
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var z = ""
+    var z: String? = null
     var c = Double.MAX_VALUE
-    val m = mutableListOf<String>()
-    for ((key, value) in stuff.toMutableMap()) {
-        if (value.first != kind) m += key
-    }
-    if ((stuff - m).isEmpty()) return null
-    for ((key, value) in stuff - m) {
-        if (value.second <= c) {
-            z = key
-            c = value.second
-        }
+    for ((key, value) in stuff) {
+        if (value.first == kind)
+            if (value.second <= c) {
+                z = key
+                c = value.second
+            }
     }
     return z
 }
@@ -249,7 +245,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
         val k = chars.map { it.toLowerCase() }
         if (i !in k) return false
     }
-    return chars.isNotEmpty()
+    return true
 }
 
 
@@ -267,11 +263,10 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
-    for (i in list.indices) {
-        if (list[i] in list.subList(i + 1, list.size).toSet())
-            res[list[i]] = res.getOrDefault(list[i], 1) + 1
+    for (i in list) {
+        res[i] = res.getOrDefault(i, 0) + 1
     }
-    return res
+    return res.filter { it.value > 1 }
 }
 
 
@@ -285,7 +280,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean =
-    (words.size != words.map { it.toSortedSet() }.toSet().size) || (words.contains("") && words.size > 1)
+    (words.size != words.map { it.toList().sorted() }.toSet().size) || (words.contains("") && words.size > 1)
 
 /**
  * Сложная
@@ -311,7 +306,16 @@ fun hasAnagrams(words: List<String>): Boolean =
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    val a = friends.toMutableMap()
+    for ((key, value) in friends) {
+        for ((key1, value1) in friends) {
+            if (key in value1) a[key1] = value + value1
+            if (key1 !in a) a[key1] = emptySet()
+        }
+    }
+    return a
+}
 
 /**
  * Сложная
@@ -333,8 +337,10 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val f = mutableMapOf<Int, Int>()
     for (i in list.indices) {
-        if (list[i] in f && number - list[i] == list[i]) return Pair(f[list[i]]!!.toInt(), i)
-        if (number - list[i] in f) return Pair(f[number - list[i]]!!.toInt(), i)
+        if (number - list[i] in f) {
+            if (number - list[i] == list[i]) return Pair(f[list[i]]!!, i)
+            return Pair(f[number - list[i]]!!, i)
+        }
         f[list[i]] = i
     }
     return Pair(-1, -1)
