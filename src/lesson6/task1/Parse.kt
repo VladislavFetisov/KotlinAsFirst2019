@@ -75,17 +75,17 @@ fun dateStrToDigit(str: String): String {
     val line = str.split(" ")
     try {
         if (line[0].toInt() < 32 && line.size == 3) return when {
-            line[1] == "января" -> String.format("%02d.%02d.%d", line[0].toInt(), 1, line[2].toInt())
-            (line[1] == "февраля" && leapYear(line[2].toInt()) && line[0].toInt() == 29) -> String.format(
+            (line[1] == "января") -> String.format("%02d.%02d.%d", line[0].toInt(), 1, line[2].toInt())
+            (line[1] == "февраля" && leapYear(line[2].toInt()) && line[0].toInt() <= 29) -> String.format(
                 "%02d.%02d.%d",
                 line[0].toInt(),
                 2,
                 line[2].toInt()
             )
-            line[1] == "02" && !leapYear(line[2].toInt()) && line[0].toInt() == 28 -> String.format(
-                "%d %s %d",
+            (line[1] == "февраля" && !leapYear(line[2].toInt()) && line[0].toInt() <= 28) -> String.format(
+                "%02d.%02d.%d",
                 line[0].toInt(),
-                "февраля",
+                2,
                 line[2].toInt()
             )
             (line[1] == "марта") -> String.format("%02d.%02d.%d", line[0].toInt(), 3, line[2].toInt())
@@ -123,13 +123,13 @@ fun dateDigitToStr(digital: String): String {
     try {
         if (line[0].toInt() < 32 && line.size == 3) return when {
             line[1] == "01" -> String.format("%d %s %d", line[0].toInt(), "января", line[2].toInt())
-            line[1] == "02" && leapYear(line[2].toInt()) && line[0].toInt() == 29 -> String.format(
+            line[1] == "02" && leapYear(line[2].toInt()) && line[0].toInt() <= 29 -> String.format(
                 "%d %s %d",
                 line[0].toInt(),
                 "февраля",
                 line[2].toInt()
             )
-            line[1] == "02" && !leapYear(line[2].toInt()) && line[0].toInt() == 28 -> String.format(
+            line[1] == "02" && !leapYear(line[2].toInt()) && line[0].toInt() <= 28 -> String.format(
                 "%d %s %d",
                 line[0].toInt(),
                 "февраля",
@@ -167,7 +167,15 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val res = StringBuilder()
+    val k = phone.filter { it != ' ' }
+    for (i in k.indices) {
+        if (k[i] != '+' && k[i] != '-' && k[i] != '(' && k[i] != ')' && k[i].toInt() !in 48..57 || (k[i] == '(' && k[i + 1] == ')')) return ""
+        else if (k[i] == '+' || k[i].toInt() in 48..57) res.append(k[i])
+    }
+    return res.toString()
+}
 
 /**
  * Средняя
