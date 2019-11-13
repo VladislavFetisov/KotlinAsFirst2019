@@ -93,8 +93,10 @@ fun dateStrToDigit(str: String): String {
         val line = str.split(" ")
         if (line.size != 3 || line[0].toInt() < 1) return ""
         val month = months.indexOf(line[1]) + 1
-        if (daysInMonth(month, line[2].toInt()) < line[0].toInt() || month == 0) return ""
-        return String.format("%02d.%02d.%d", line[0].toInt(), month, line[2].toInt())
+        val day = line[0].toInt()
+        val year = line[2].toInt()
+        if (daysInMonth(month, year) < day || month == 0) return ""
+        return String.format("%02d.%02d.%d", day, month, year)
     } catch (e: NumberFormatException) {
         return ""
     }
@@ -158,7 +160,16 @@ fun flattenPhoneNumber(phone: String): String {
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    if (Regex("""[^\d\-\%\s]""").containsMatchIn(jumps) || !Regex("""[\d]""").containsMatchIn(jumps)) return -1
+    var c = -1
+    val line = jumps.split(" ")
+    for (i in line) {
+        val j = i.toIntOrNull()
+        if (j != null && j > c) c = j
+    }
+    return c
+}
 
 
 /**
