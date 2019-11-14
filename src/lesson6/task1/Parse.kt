@@ -3,8 +3,6 @@
 package lesson6.task1
 
 import lesson2.task2.daysInMonth
-import java.lang.Error
-import java.util.regex.Pattern
 
 /**
  * Пример
@@ -73,29 +71,29 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-val months = listOf(
-    "января",
-    "февраля",
-    "марта",
-    "апреля",
-    "мая",
-    "июня",
-    "июля",
-    "августа",
-    "сентября",
-    "октября",
-    "ноября",
-    "декабря"
+val months = mapOf(
+    "января" to 1,
+    "февраля" to 2,
+    "марта" to 3,
+    "апреля" to 4,
+    "мая" to 5,
+    "июня" to 6,
+    "июля" to 7,
+    "августа" to 8,
+    "сентября" to 9,
+    "октября" to 10,
+    "ноября" to 11,
+    "декабря" to 12
 )
 
 fun dateStrToDigit(str: String): String {
     try {
         val line = str.split(" ")
         if (line.size != 3 || line[0].toInt() < 1) return ""
-        val month = months.indexOf(line[1]) + 1
+        val month = months[line[1]] ?: return ""
         val day = line[0].toInt()
         val year = line[2].toInt()
-        if (daysInMonth(month, year) < day || month == 0) return ""
+        if (daysInMonth(month, year) < day) return ""
         return String.format("%02d.%02d.%d", day, month, year)
     } catch (e: NumberFormatException) {
         return ""
@@ -120,7 +118,10 @@ fun dateDigitToStr(digital: String): String {
         val year = line[2].toInt()
         val month = line[1].toInt()
         if (daysInMonth(month, year) < day || month !in 1..12) return ""
-        return String.format("%d %s %d", day, months[month - 1], year)
+        for((key,value) in months){
+            if (value==month) return String.format("%d %s %d", day, key , year)
+        }
+        return ""
     } catch (e: NumberFormatException) {
         return ""
     }
@@ -141,11 +142,11 @@ fun dateDigitToStr(digital: String): String {
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
 fun flattenPhoneNumber(phone: String): String {
+    if(!Regex("""\+?(\d+)? ?(\([\d\-\s]+\))? ?[\d\-\s]+""").matches(phone)) return ""
     val res = StringBuilder()
     val k = phone.filter { it != ' ' }
     for (i in k.indices) {
-        if (k[i] != '+' && k[i] != '-' && k[i] != '(' && k[i] != ')' && k[i].toInt() !in 48..57 || (k[i] == '(' && k[i + 1] == ')')) return ""
-        else if (k[i] == '+' || k[i].toInt() in 48..57) res.append(k[i])
+        if (k[i] == '+' || k[i] in '1'..'9') res.append(k[i])
     }
     return res.toString()
 }
@@ -161,7 +162,7 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    if (Regex("""[^\d\-\%\s]""").containsMatchIn(jumps) || !Regex("""[\d]""").containsMatchIn(jumps)) return -1
+    if (Regex("""[^\d\-%\s]""").containsMatchIn(jumps) || !Regex("""[\d]""").containsMatchIn(jumps)) return -1
     var c = -1
     val line = jumps.split(" ")
     for (i in line) {
@@ -183,7 +184,13 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    if(!Regex("""(\d+ [+%-]+ ?)+""").matches(jumps)) return -1
+    var count=-1
+    val line=jumps.split(" ")
+    for(i in line.indices step(2)) if(line[i].toInt()>count&&"+" in line[i+1]) count=line[i].toInt()
+    return count
+}
 
 /**
  * Сложная
@@ -192,9 +199,18 @@ fun bestHighJump(jumps: String): Int = TODO()
  * использующее целые положительные числа, плюсы и минусы, разделённые пробелами.
  * Наличие двух знаков подряд "13 + + 10" или двух чисел подряд "1 2" не допускается.
  * Вернуть значение выражения (6 для примера).
- * Про нарушении формата входной строки бросить исключение IllegalArgumentException
+ * Про нарушении формата входной строки бросить исключение IllegalArgumentException "4 - -2"
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    require(Regex("""(\d+ [+-] )*\d+""").matches(expression))
+    val line=expression.split(" ")
+    var sum=line[0].toInt()
+    for(i in 1 until line.size step(2)){
+        if(line[i]=="+")sum+=line[i+1].toInt()
+        else sum-=line[i+1].toInt()
+    }
+    return sum
+}
 
 /**
  * Сложная

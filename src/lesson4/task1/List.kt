@@ -4,9 +4,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson3.task1.isPrime
-import lesson3.task1.minDivisor
 import java.lang.StringBuilder
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
@@ -212,7 +210,6 @@ fun factorize(n: Int): List<Int> {
     var z = n
     val res = mutableListOf<Int>()
     var count = 2
-    if (isPrime(n)) return listOf(n)
     while (z != 1)
         if (z % count == 0) {
             res.add(count)
@@ -304,8 +301,8 @@ fun decimalFromString(str: String, base: Int): Int {
     val z = str.toMutableList()
     val res = mutableListOf<Int>()
     for (element in z) {
-        if (element.toInt() >= 97) res += element.toInt() - 87
-        if (element.toInt() <= 57) res += element.toInt() - 48
+        res += if(element in 'a'..'z') element-'a'+10
+        else element-'0'
     }
     return decimal(res, base)
 }
