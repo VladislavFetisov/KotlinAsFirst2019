@@ -141,13 +141,10 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String {
-    if(!Regex("""\+?(\d+)? ?(\([\d\-\s]+\))? ?[\d\-\s]+""").matches(phone)) return ""
-    val res = StringBuilder()
-    val k = phone.filter { it != ' ' }
-    for (i in k.indices) if (k[i] == '+' || k[i] in '0'..'9') res.append(k[i])
-    return res.toString()
-}
+fun flattenPhoneNumber(phone: String): String=
+    if(!Regex("""\+?(\d+)? ?(\([\d\-\s]+\))? ?[\d\-\s]+""").matches(phone)) ""
+    else phone.filter { it != ' '&& it!='('&& it!='-' && it!=')' }
+
 
 /**
  * Средняя
