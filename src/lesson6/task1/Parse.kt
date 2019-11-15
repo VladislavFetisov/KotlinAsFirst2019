@@ -222,15 +222,12 @@ fun plusMinus(expression: String): Int {
 fun firstDuplicateIndex(str: String): Int {
     val line = str.split(" ").map { it.toLowerCase() }
     if (line.size < 2) return -1
-    val map = mutableMapOf<String, Int>()
     var c = 0
-    map[line[0]] = c
+    var prevWord = "${line[0]}"
     for (i in 1 until line.size) {
-        if (line[i] == line[i - 1]) return map[line[i - 1]]!!
-        else {
-            c += line[i - 1].count() + 1
-            map[line[i]] = c
-        }
+        if (line[i] == prevWord) return c
+        c += line[i - 1].count() + 1
+        prevWord = line[i]
     }
     return -1
 }
