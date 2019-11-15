@@ -145,7 +145,7 @@ fun flattenPhoneNumber(phone: String): String {
     if(!Regex("""\+?(\d+)? ?(\([\d\-\s]+\))? ?[\d\-\s]+""").matches(phone)) return ""
     val res = StringBuilder()
     val k = phone.filter { it != ' ' }
-    for (i in k.indices) if (k[i] == '+' || k[i] in '1'..'9') res.append(k[i])
+    for (i in k.indices) if (k[i] == '+' || k[i] in '0'..'9') res.append(k[i])
     return res.toString()
 }
 
