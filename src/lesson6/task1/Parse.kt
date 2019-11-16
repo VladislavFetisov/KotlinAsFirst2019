@@ -143,9 +143,7 @@ fun dateDigitToStr(digital: String): String {
  */
 fun flattenPhoneNumber(phone: String): String=
     if(!Regex("""\+?(\d+)? ?(\([\d\-\s]+\))? ?[\d\-\s]+""").matches(phone)) ""
-    else phone.filter { it != ' '&& it!='('&& it!='-' && it!=')' }
-
-
+    else phone.filter { it != ' '&& it!='(' && it!='-' && it!=')' }
 /**
  * Средняя
  *
@@ -220,7 +218,7 @@ fun firstDuplicateIndex(str: String): Int {
     val line = str.split(" ").map { it.toLowerCase() }
     if (line.size < 2) return -1
     var c = 0
-    var prevWord = "${line[0]}"
+    var prevWord = line[0]
     for (i in 1 until line.size) {
         if (line[i] == prevWord) return c
         c += line[i - 1].count() + 1
@@ -239,8 +237,19 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
-
+fun mostExpensive(description: String): String {
+    if (!description.matches(Regex("""([A-я]+ \d+(\.\d+)?; )*([A-я]+ \d+\.?\d+?)"""))) return ""
+    val line = description.split(" ",";")
+    var z = -1.0
+    var res = ""
+    for (i in 1 until line.size step (3)) {
+        if (line[i].toDouble() > z) {
+                res = line[i - 1]
+                z = line[i].toDouble()
+            }
+    }
+    return res
+}
 
 /**
  * Сложная
