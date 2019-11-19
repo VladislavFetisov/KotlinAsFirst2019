@@ -139,11 +139,11 @@ fun dateDigitToStr(digital: String): String {
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку.
  *
- * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
+ * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах. "12 --  34- 5 -- 67 -98"
  */
 fun flattenPhoneNumber(phone: String): String=
-    if(!Regex("""\+?(\d+)? ?(\([\d\-\s]+\))? ?(\d[\-\s]?)+""").matches(phone)) ""
-    else phone.filter { it != ' '&& it!='(' && it!='-' && it!=')' }
+    if(!Regex("""(\+\d+)? *(\([\d\-\s]+\))? *(\d+[\- ]*)+""").matches(phone)) ""
+    else phone.filter { it != ' ' && it!= '(' && it!='-' && it !=')' }
 /**
  * Средняя
  *
@@ -199,7 +199,7 @@ fun plusMinus(expression: String): Int {
     val line=expression.split(" ")
     var sum=line[0].toInt()
     for(i in 1 until line.size step(2)){
-        if(line[i]=="+")sum+=line[i+1].toInt()
+        if(line[i]=="+") sum+=line[i+1].toInt()
         else sum-=line[i+1].toInt()
     }
     return sum
@@ -238,7 +238,7 @@ fun firstDuplicateIndex(str: String): Int {
  * Все цены должны быть больше либо равны нуля.
  */
 fun mostExpensive(description: String): String {
-    if (!description.matches(Regex("""([A-яA-z]+ \d+(\.\d+)?; )*([A-яA-z]+ \d+(\.\d+)?)"""))) return ""
+    if (!description.matches(Regex("""([^\s;]+ \d+(\.\d+)?; )*([^\s;]+ \d+(\.\d+)?)"""))) return ""
     val line = description.split(" ",";")
     var z = -1.0
     var res = ""
@@ -260,9 +260,33 @@ fun mostExpensive(description: String): String {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: XXIII = 23, XLIV = 44, C = 100
  *
- * Вернуть -1, если roman не является корректным римским числом
+ * Вернуть -1, если roman не является корректным римским числом "MCMLXXVIII"
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    if (roman.isEmpty() || !roman.matches(Regex("""M*(CM|DC{0,3}|CD|C{0,3})?(XC|LX{0,3}|XL|X{0,3})?(IX|VI{0,3}|IV|I{0,3})?"""))) return -1
+    var line = roman
+    var res = 0
+    val numbers = mapOf(
+        "CM" to 900,
+        "M" to 1000,
+        "CD" to 400,
+        "D" to 500,
+        "XC" to 90,
+        "C" to 100,
+        "XL" to 40,
+        "L" to 50,
+        "IX" to 9,
+        "X" to 10,
+        "IV" to 4,
+        "V" to 5,
+        "I" to 1
+    )
+    for((key,value) in numbers){
+        res+=Regex(key).findAll(line).count()*value
+        line=Regex(key).replace(line, "")
+    }
+    return res
+}
 
 /**
  * Очень сложная

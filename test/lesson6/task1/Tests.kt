@@ -124,7 +124,7 @@ class Tests {
         assertEquals("Курица", mostExpensive("Хлеб 39.9; Молоко 62.5; Курица 184.0; Конфеты 89.9"))
         assertEquals("Вино", mostExpensive("Вино 255.0"))
         assertEquals("", mostExpensive("Хлеб 39.9; Молоко 62.5 Курица 184.0; Конфеты 89.9"))
-        assertEquals("a", mostExpensive("a 0"))
+        assertEquals("", mostExpensive("  0"))
     }
 
     @Test
@@ -136,6 +136,7 @@ class Tests {
         assertEquals(694, fromRoman("DCXCIV"))
         assertEquals(49, fromRoman("XLIX"))
         assertEquals(-1, fromRoman("Z"))
+        assertEquals(-1, fromRoman(""))
     }
 
     @Test
