@@ -144,7 +144,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMa
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> =a.toSet().intersect(b.toSet()).toList()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().intersect(b.toSet()).toList()
 
 /**
  * Средняя
@@ -274,7 +274,10 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean =
-    (words.size != words.map { it.toList().sorted() }.toSet().size) || (words.contains("") && words.size > 1)
+        (words.size != words.map {
+            it.toList()
+                .sorted()
+        }.toSet().size) || (words.contains("") && words.size > 1)
 
 /**
  * Сложная
@@ -300,7 +303,7 @@ fun hasAnagrams(words: List<String>): Boolean =
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> =TODO()
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
 
 /**
  * Сложная
@@ -322,7 +325,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val f = mutableMapOf<Int, Int>()
     for (i in list.indices) {
-        val remainingNumber=number - list[i]
+        val remainingNumber = number - list[i]
         if (remainingNumber in f) return Pair(f[remainingNumber]!!, i)
         f[list[i]] = i
     }

@@ -118,8 +118,8 @@ fun dateDigitToStr(digital: String): String {
         val year = line[2].toInt()
         val month = line[1].toInt()
         if (daysInMonth(month, year) < day || month !in 1..12) return ""
-        for((key,value) in months){
-            if (value==month) return String.format("%d %s %d", day, key , year)
+        for ((key, value) in months) {
+            if (value == month) return String.format("%d %s %d", day, key, year)
         }
         return ""
     } catch (e: NumberFormatException) {
@@ -141,9 +141,10 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах. "12 --  34- 5 -- 67 -98"
  */
-fun flattenPhoneNumber(phone: String): String=
-    if(!Regex("""(\+\d+)? *(\([\d\-\s]+\))? *(\d+[\- ]*)+""").matches(phone)) ""
-    else phone.filter { it != ' ' && it!= '(' && it!='-' && it !=')' }
+fun flattenPhoneNumber(phone: String): String =
+        if (!Regex("""(\+\d+)? *(\([\d\- ]+\))? *(\d+[\- ]*)+""").matches(phone)) ""
+        else phone.filter { it != ' ' && it != '(' && it != '-' && it != ')' }
+
 /**
  * Средняя
  *
@@ -178,10 +179,10 @@ fun bestLongJump(jumps: String): Int {
  * вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    if(!Regex("""(\d+ [+%-]+ ?)+""").matches(jumps)) return -1
-    var count=-1
-    val line=jumps.split(" ")
-    for(i in line.indices step(2)) if(line[i].toInt()>count&&"+" in line[i+1]) count=line[i].toInt()
+    if (!Regex("""(\d+ [+%-]+ ?)+""").matches(jumps)) return -1
+    var count = -1
+    val line = jumps.split(" ")
+    for (i in line.indices step (2)) if (line[i].toInt() > count && "+" in line[i + 1]) count = line[i].toInt()
     return count
 }
 
@@ -196,11 +197,11 @@ fun bestHighJump(jumps: String): Int {
  */
 fun plusMinus(expression: String): Int {
     require(Regex("""(\d+ [+-] )*\d+""").matches(expression))
-    val line=expression.split(" ")
-    var sum=line[0].toInt()
-    for(i in 1 until line.size step(2)){
-        if(line[i]=="+") sum+=line[i+1].toInt()
-        else sum-=line[i+1].toInt()
+    val line = expression.split(" ")
+    var sum = line[0].toInt()
+    for (i in 1 until line.size step (2)) {
+        if (line[i] == "+") sum += line[i + 1].toInt()
+        else sum -= line[i + 1].toInt()
     }
     return sum
 }
@@ -215,7 +216,8 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val line = str.split(" ").map { it.toLowerCase() }
+    val line = str.split(" ")
+        .map { it.toLowerCase() }
     if (line.size < 2) return -1
     var c = 0
     var prevWord = line[0]
@@ -226,6 +228,7 @@ fun firstDuplicateIndex(str: String): Int {
     }
     return -1
 }
+
 /**
  * Сложная
  *
@@ -239,14 +242,14 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     if (!description.matches(Regex("""([^\s;]+ \d+(\.\d+)?; )*([^\s;]+ \d+(\.\d+)?)"""))) return ""
-    val line = description.split(" ",";")
+    val line = description.split(" ", ";")
     var z = -1.0
     var res = ""
     for (i in 1 until line.size step (3)) {
         if (line[i].toDouble() > z) {
-                res = line[i - 1]
-                z = line[i].toDouble()
-            }
+            res = line[i - 1]
+            z = line[i].toDouble()
+        }
     }
     return res
 }
@@ -260,10 +263,10 @@ fun mostExpensive(description: String): String {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: XXIII = 23, XLIV = 44, C = 100
  *
- * Вернуть -1, если roman не является корректным римским числом "MCMLXXVIII"
+ * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    if (roman.isEmpty() || !roman.matches(Regex("""M*(CM|DC{0,3}|CD|C{0,3})?(XC|LX{0,3}|XL|X{0,3})?(IX|VI{0,3}|IV|I{0,3})?"""))) return -1
+    if (roman.isEmpty() || !roman.matches(Regex("""M*(CM|DC{0,3}|CD|C{1,3})?(XC|LX{0,3}|XL|X{1,3})?(IX|VI{0,3}|IV|I{1,3})?"""))) return -1
     var line = roman
     var res = 0
     val numbers = mapOf(
@@ -281,9 +284,9 @@ fun fromRoman(roman: String): Int {
         "V" to 5,
         "I" to 1
     )
-    for((key,value) in numbers){
-        res+=Regex(key).findAll(line).count()*value
-        line=Regex(key).replace(line, "")
+    for ((key, value) in numbers) {
+        res += Regex(key).findAll(line).count() * value
+        line = Regex(key).replace(line, "")
     }
     return res
 }

@@ -3,7 +3,6 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import lesson3.task1.isPrime
 import java.lang.StringBuilder
 import kotlin.math.sqrt
 
@@ -301,8 +300,8 @@ fun decimalFromString(str: String, base: Int): Int {
     val z = str.toMutableList()
     val res = mutableListOf<Int>()
     for (element in z) {
-        res += if(element in 'a'..'z') element-'a'+10
-        else element-'0'
+        res += if(element in 'a'..'z') element-'a' + 10
+        else element- '0'
     }
     return decimal(res, base)
 }
