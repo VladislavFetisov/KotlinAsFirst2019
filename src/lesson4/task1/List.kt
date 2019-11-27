@@ -11,16 +11,15 @@ import kotlin.math.sqrt
  *
  * Найти все корни уравнения x^2 = y
  */
-fun sqRoots(y: Double) =
-    when {
-        y < 0 -> listOf()
-        y == 0.0 -> listOf(0.0)
-        else -> {
-            val root = sqrt(y)
-            // Результат!
-            listOf(-root, root)
-        }
+fun sqRoots(y: Double) = when {
+    y < 0 -> listOf()
+    y == 0.0 -> listOf(0.0)
+    else -> {
+        val root = sqrt(y)
+        // Результат!
+        listOf(-root, root)
     }
+}
 
 /**
  * Пример
@@ -94,7 +93,8 @@ fun squares(vararg array: Int) = squares(array.toList()).toTypedArray()
  * "А роза упала на лапу Азора" является палиндромом.
  */
 fun isPalindrome(str: String): Boolean {
-    val lowerCase = str.toLowerCase().filter { it != ' ' }
+    val lowerCase = str.toLowerCase()
+        .filter { it != ' ' }
     for (i in 0..lowerCase.length / 2) {
         if (lowerCase[i] != lowerCase[lowerCase.length - i - 1]) return false
     }
@@ -123,11 +123,10 @@ fun abs(v: List<Double>): Double = sqrt(v.fold(0.0) { total, next -> next * next
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double =
-    when {
-        (list.isEmpty()) -> 0.0
-        else -> (list.sum() / list.size)
-    }
+fun mean(list: List<Double>): Double = when {
+    (list.isEmpty()) -> 0.0
+    else -> (list.sum() / list.size)
+}
 
 
 /**
@@ -209,11 +208,10 @@ fun factorize(n: Int): List<Int> {
     var z = n
     val res = mutableListOf<Int>()
     var count = 2
-    while (z != 1)
-        if (z % count == 0) {
-            res.add(count)
-            z /= count
-        } else count++
+    while (z != 1) if (z % count == 0) {
+        res.add(count)
+        z /= count
+    } else count++
 
     return res
 }
@@ -300,8 +298,8 @@ fun decimalFromString(str: String, base: Int): Int {
     val z = str.toMutableList()
     val res = mutableListOf<Int>()
     for (element in z) {
-        res += if(element in 'a'..'z') element-'a' + 10
-        else element- '0'
+        res += if (element in 'a'..'z') element - 'a' + 10
+        else element - '0'
     }
     return decimal(res, base)
 }

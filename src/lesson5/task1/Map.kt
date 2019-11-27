@@ -11,8 +11,7 @@ package lesson5.task1
  * игнорируется.
  */
 fun shoppingListCost(
-    shoppingList: List<String>,
-    costs: Map<String, Double>
+    shoppingList: List<String>, costs: Map<String, Double>
 ): Double {
     var totalCost = 0.0
 
@@ -33,8 +32,7 @@ fun shoppingListCost(
  * для которых телефон начинается с заданного кода страны `countryCode`
  */
 fun filterByCountryCode(
-    phoneBook: MutableMap<String, String>,
-    countryCode: String
+    phoneBook: MutableMap<String, String>, countryCode: String
 ) {
     val namesToRemove = mutableListOf<String>()
 
@@ -56,8 +54,7 @@ fun filterByCountryCode(
  * и вернуть отфильтрованный текст
  */
 fun removeFillerWords(
-    text: List<String>,
-    vararg fillerWords: String
+    text: List<String>, vararg fillerWords: String
 ): List<String> {
     val fillerWordSet = setOf(*fillerWords)
 
@@ -94,9 +91,8 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val res = mutableMapOf<Int, MutableList<String>>()
-    for ((key, value) in grades)
-        if (value in res) res[value]!!.add(key)
-        else res[value] = mutableListOf(key)
+    for ((key, value) in grades) if (value in res) res[value]!!.add(key)
+    else res[value] = mutableListOf(key)
     return res
 }
 
@@ -132,8 +128,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMap<String, String> {
-    for ((key, _) in b)
-        if (a[key] == b[key]) a.remove(key)
+    for ((key, _) in b) if (a[key] == b[key]) a.remove(key)
     return a
 }
 
@@ -215,11 +210,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     var z: String? = null
     var c = Double.MAX_VALUE
     for ((key, value) in stuff) {
-        if (value.first == kind)
-            if (value.second <= c) {
-                z = key
-                c = value.second
-            }
+        if (value.first == kind) if (value.second <= c) {
+            z = key
+            c = value.second
+        }
     }
     return z
 }
@@ -273,11 +267,10 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  * Например:
  *hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean =
-        (words.size != words.map {
-            it.toList()
-                .sorted()
-        }.toSet().size) || (words.contains("") && words.size > 1)
+fun hasAnagrams(words: List<String>): Boolean = (words.size != words.map {
+    it.toList()
+        .sorted()
+}.toSet().size) || (words.contains("") && words.size > 1)
 
 /**
  * Сложная

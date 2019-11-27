@@ -242,13 +242,15 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     if (!description.matches(Regex("""([^\s;]+ \d+(\.\d+)?; )*([^\s;]+ \d+(\.\d+)?)"""))) return ""
-    val line = description.split(" ", ";")
-    var z = -1.0
+    val line = description.split(";")
+    var z = Double.MIN_VALUE
     var res = ""
-    for (i in 1 until line.size step (3)) {
-        if (line[i].toDouble() > z) {
-            res = line[i - 1]
-            z = line[i].toDouble()
+    for (i in line) {
+        val k = i.trim()
+            .split(" ")
+        if (k[1].toDouble() > z) {
+            res = k[0]
+            z = k[1].toDouble()
         }
     }
     return res
@@ -261,32 +263,30 @@ fun mostExpensive(description: String): String {
  * в десятичную систему и вернуть как результат.
  * Римские цифры: 1 = I, 4 = IV, 5 = V, 9 = IX, 10 = X, 40 = XL, 50 = L,
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
- * Например: XXIII = 23, XLIV = 44, C = 100
+ * Например: XXIII = 23, XLIV = 44, C = 100 assertEquals(694, fromRoman("DCXCIV"))
  *
- * Вернуть -1, если roman не является корректным римским числом
+ * Вернуть -1, если roman не является корректным римским числом\\
  */
 fun fromRoman(roman: String): Int {
     if (roman.isEmpty() || !roman.matches(Regex("""M*(CM|DC{0,3}|CD|C{1,3})?(XC|LX{0,3}|XL|X{1,3})?(IX|VI{0,3}|IV|I{1,3})?"""))) return -1
-    var line = roman
     var res = 0
     val numbers = mapOf(
-        "CM" to 900,
-        "M" to 1000,
-        "CD" to 400,
-        "D" to 500,
-        "XC" to 90,
-        "C" to 100,
-        "XL" to 40,
-        "L" to 50,
-        "IX" to 9,
-        "X" to 10,
-        "IV" to 4,
-        "V" to 5,
-        "I" to 1
+        "M" to 1000, "D" to 500, "C" to 100, "L" to 50, "X" to 10, "V" to 5, "I" to 1
     )
-    for ((key, value) in numbers) {
-        res += Regex(key).findAll(line).count() * value
-        line = Regex(key).replace(line, "")
+    for (i in roman) {
+        res += numbers.getValue(i.toString())
+    }
+    when {
+        "CD" in roman -> res -= 200
+        "CM" in roman -> res -= 200
+    }
+    when {
+        "XC" in roman -> res -= 20
+        "XL" in roman -> res -= 20
+    }
+    when {
+        "IX" in roman -> res -= 2
+        "IV" in roman -> res -= 2
     }
     return res
 }
@@ -327,4 +327,44 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    var indexChar = 0
+    var countCommands = 0
+    val list = mutableListOf<Int>()
+    var value = cells / 2
+    var bracketsInString = 0
+    for (i in 0..cells) list.add(0)
+    while (indexChar < commands.length && countCommands < limit) {
+        when (commands[indexChar]) {
+            '+' -> list[value]++
+            '>' -> value++
+            '-' -> list[value]--
+            '<' -> value--
+        }
+        if (commands[indexChar] == '[' && list[value] == 0) {
+            for (i in (indexChar + 1) until commands.length) {
+                if (commands[i] == '[') bracketsInString++
+                if (commands[i] == ']') bracketsInString--
+                if (bracketsInString == -1) {
+                    bracketsInString++
+                    indexChar += i + 1
+                    break
+                }
+            }
+        }
+        if (commands[indexChar] == ']' && list[value] != 0) {
+            for (i in indexChar - 1 downTo 0) {
+                if (commands[i] == '[') bracketsInString--
+                if (commands[i] == ']') bracketsInString++
+                if (bracketsInString == -1) {
+                    bracketsInString++
+                    indexChar -= i + 1
+                    break
+                }
+            }
+        }
+        indexChar++
+        countCommands++
+    }
+    return list
+}

@@ -54,7 +54,14 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val res = mutableMapOf<String, Int>()
+    val text = File(inputName).readText()
+        .toLowerCase()
+    for (word in substrings) res[word] = text.windowed(word.length) { if (it == word.toLowerCase()) 1 else 0 }
+        .sum()
+    return res
+}
 
 
 /**
@@ -74,12 +81,15 @@ fun sibilants(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     val text = File(inputName).readText()
     val line = StringBuilder().append(text[0])
-    val letters = listOf('ж', 'ч', 'ш', 'щ')
-    val corrections = mapOf('Ы' to 'И', 'ы' to 'и', 'Я' to 'А', 'я' to 'а', 'Ю' to 'У', 'ю' to 'у')
-    for (i in 1 until text.length) {
-        if (text[i] in corrections && text[i - 1].toLowerCase() in letters) {
-            line.append(corrections[text[i]])
-        } else line.append(text[i])
+    if (line == null) output.close()
+    else {
+        val letters = listOf('ж', 'ч', 'ш', 'щ')
+        val corrections = mapOf('Ы' to 'И', 'ы' to 'и', 'Я' to 'А', 'я' to 'а', 'Ю' to 'У', 'ю' to 'у')
+        for (i in 1 until text.length) {
+            if (text[i] in corrections && text[i - 1].toLowerCase() in letters) {
+                line.append(corrections[text[i]])
+            } else line.append(text[i])
+        }
     }
     output.write(line.toString())
     output.close()
@@ -161,17 +171,18 @@ fun top20Words(inputName: String): Map<String, Int> {
     var count = 0
     val text = File(inputName).readText()
     if (text.isEmpty()) return emptyMap()
-    val text1 = Regex("""[^A-zА-яё\s]""").replace(text, "")
-        .split(Regex("\\s+"))
+    val text1 = text.split(Regex("""[^A-zА-яё]"""))
         .filter { it != "" }
     for (i in text1) res[i.toLowerCase()] = res.getOrDefault(i.toLowerCase(), 0) + 1
-    while (count < 20) {
-        val max = res.maxBy { it.value }!!.toPair()
-        res2 += max
-        res -= max.first
-        count++
-        if (count == res.count()) break
-    }
+    if (res.size > 20) {
+        while (count < 20) {
+            val max = res.maxBy { it.value }!!.toPair()
+            res2 += max
+            res -= max.first
+            count++
+            if (count == 20) break
+        }
+    } else return res
     return res2
 }
 
@@ -211,7 +222,17 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    TODO()
+    /*val output = File(outputName).bufferedWriter()
+    val text = File(inputName).readText()
+    val string=StringBuilder()
+    for (Char in text) {
+        if (Char.toLowerCase() in ) {
+            string.append(dictionary.getValue(Char).toLowerCase())
+        } else string.append(Char.toLowerCase())
+
+    }
+    output.write(string.toString())
+    output.close()*/TODO()
 }
 
 /**
