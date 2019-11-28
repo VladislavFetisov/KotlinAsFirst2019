@@ -243,11 +243,10 @@ fun firstDuplicateIndex(str: String): Int {
 fun mostExpensive(description: String): String {
     if (!description.matches(Regex("""([^\s;]+ \d+(\.\d+)?; )*([^\s;]+ \d+(\.\d+)?)"""))) return ""
     val line = description.split(";")
-    var z = Double.MIN_VALUE
+    var z =Double.NEGATIVE_INFINITY
     var res = ""
     for (i in line) {
-        val k = i.trim()
-            .split(" ")
+        val k = i.trim().split(" ")
         if (k[1].toDouble() > z) {
             res = k[0]
             z = k[1].toDouble()
@@ -268,7 +267,8 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом\\
  */
 fun fromRoman(roman: String): Int {
-    if (roman.isEmpty() || !roman.matches(Regex("""M*(CM|DC{0,3}|CD|C{1,3})?(XC|LX{0,3}|XL|X{1,3})?(IX|VI{0,3}|IV|I{1,3})?"""))) return -1
+    if (roman.isEmpty() || !roman.
+            matches(Regex("""M*(CM|DC{0,3}|CD|C{1,3})?(XC|LX{0,3}|XL|X{1,3})?(IX|VI{0,3}|IV|I{1,3})?"""))) return -1
     var res = 0
     val numbers = mapOf(
         "M" to 1000, "D" to 500, "C" to 100, "L" to 50, "X" to 10, "V" to 5, "I" to 1

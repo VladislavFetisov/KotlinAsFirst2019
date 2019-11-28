@@ -171,7 +171,7 @@ fun top20Words(inputName: String): Map<String, Int> {
     var count = 0
     val text = File(inputName).readText()
     if (text.isEmpty()) return emptyMap()
-    val text1 = text.split(Regex("""[^A-zА-яё]"""))
+    val text1 = text.split(Regex("""[^A-zА-яЁё]"""))
         .filter { it != "" }
     for (i in text1) res[i.toLowerCase()] = res.getOrDefault(i.toLowerCase(), 0) + 1
     if (res.size > 20) {
