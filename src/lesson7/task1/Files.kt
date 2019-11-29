@@ -91,7 +91,7 @@ fun sibilants(inputName: String, outputName: String) {
             } else line.append(text[i])
         }
     }
-    output.write(line.toString())
+    if (text.isNotEmpty()) output.write(line.toString())
     output.close()
 }
 
@@ -274,8 +274,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             count = length
         }
     }
-    if (list.size > 1) output.write(list.joinToString(", "))
-    else output.write(list.toString())
+    if (text.isNotEmpty()) output.write(list.joinToString(", "))
     output.close()
 }
 
