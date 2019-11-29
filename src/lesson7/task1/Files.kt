@@ -81,16 +81,18 @@ fun sibilants(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     val text = File(inputName).readText()
     if (text.isEmpty()) output.close()
-    val line = StringBuilder().append(text[0])
-    val letters = listOf('ж', 'ч', 'ш', 'щ')
-    val corrections = mapOf('Ы' to 'И', 'ы' to 'и', 'Я' to 'А', 'я' to 'а', 'Ю' to 'У', 'ю' to 'у')
-    for (i in 1 until text.length) {
-        if (text[i] in corrections && text[i - 1].toLowerCase() in letters) {
-            line.append(corrections[text[i]])
-        } else line.append(text[i])
+    else {
+        val line = StringBuilder().append(text[0])
+        val letters = listOf('ж', 'ч', 'ш', 'щ')
+        val corrections = mapOf('Ы' to 'И', 'ы' to 'и', 'Я' to 'А', 'я' to 'а', 'Ю' to 'У', 'ю' to 'у')
+        for (i in 1 until text.length) {
+            if (text[i] in corrections && text[i - 1].toLowerCase() in letters) {
+                line.append(corrections[text[i]])
+            } else line.append(text[i])
+        }
+        output.write(line.toString())
+        output.close()
     }
-    output.write(line.toString())
-    output.close()
 }
 
 /**
