@@ -80,18 +80,16 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 fun sibilants(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     val text = File(inputName).readText()
+    if (text.isEmpty()) output.close()
     val line = StringBuilder().append(text[0])
-    if (line == null) output.close()
-    else {
-        val letters = listOf('ж', 'ч', 'ш', 'щ')
-        val corrections = mapOf('Ы' to 'И', 'ы' to 'и', 'Я' to 'А', 'я' to 'а', 'Ю' to 'У', 'ю' to 'у')
-        for (i in 1 until text.length) {
-            if (text[i] in corrections && text[i - 1].toLowerCase() in letters) {
-                line.append(corrections[text[i]])
-            } else line.append(text[i])
-        }
+    val letters = listOf('ж', 'ч', 'ш', 'щ')
+    val corrections = mapOf('Ы' to 'И', 'ы' to 'и', 'Я' to 'А', 'я' to 'а', 'Ю' to 'У', 'ю' to 'у')
+    for (i in 1 until text.length) {
+        if (text[i] in corrections && text[i - 1].toLowerCase() in letters) {
+            line.append(corrections[text[i]])
+        } else line.append(text[i])
     }
-    if (text.isNotEmpty()) output.write(line.toString())
+    output.write(line.toString())
     output.close()
 }
 
@@ -265,16 +263,19 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     val text = File(inputName).readText()
         .split(Regex("""\s+"""))
-    val list = mutableListOf<String>()
+    if (text.isEmpty()) output.close()
+    var list = mutableListOf<String>()
     var count = 0
     for (word in text) {
         val length = word.length
         if (length >= count && word.toLowerCase().toSet().size == length) {
-            list += word
+            if (length != count) list = list.filter { false } //Очищаю лист,не знаю,как сделать по-другому
+                .toMutableList()
+            list.plusAssign(word)
             count = length
         }
     }
-    if (text.isNotEmpty()) output.write(list.joinToString(", "))
+    output.write(list.joinToString(", "))
     output.close()
 }
 
