@@ -2,8 +2,11 @@
 
 package lesson7.task1
 
+import lesson3.task1.digitNumber
 import java.io.File
 import java.lang.StringBuilder
+import kotlin.math.log10
+import kotlin.math.min
 
 /**
  * Пример
@@ -471,9 +474,30 @@ fun markdownToHtml(inputName: String, outputName: String) {
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val output = File(outputName).bufferedWriter()
+    val string = StringBuilder()
+    val countGaps = digitNumber(lhv * rhv) + 1   //Поскольку есть знак умножения
+    for (i in 0 until (countGaps - digitNumber(lhv))) string.append(" ")
+    string.append(lhv, "\n*")
+    for (i in 0 until (countGaps - digitNumber(rhv)) - 1) string.append(" ")
+    string.append(rhv, "\n")
+    for (i in 0 until countGaps) string.append("-")
+    string.append("\n")
+    for (i in 0 until countGaps - digitNumber(lhv * (rhv % 10))) string.append(" ")
+    string.append(lhv * (rhv % 10), "\n")
+    var c = rhv / 10
+    var category = 1
+    while (c != 0) {
+        string.append("+")
+        for (i in 0 until (countGaps - digitNumber(lhv * (c % 10)) - category) - 1) string.append(" ")
+        string.append(lhv * (c % 10), "\n")
+        c /= 10
+        category++
+    }
+    for (i in 0 until countGaps) string.append("-")
+    output.write(string.append("\n", " ", lhv * rhv).toString())
+    output.close()
 }
-
 
 /**
  * Сложная
