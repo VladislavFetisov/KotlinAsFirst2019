@@ -4,9 +4,7 @@ package lesson7.task1
 
 import lesson3.task1.digitNumber
 import java.io.File
-import java.lang.StringBuilder
-import kotlin.math.log10
-import kotlin.math.min
+import kotlin.text.StringBuilder
 
 /**
  * Пример
@@ -116,7 +114,18 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val output = File(outputName).bufferedWriter()
+    val text = File(inputName).readText()
+    val line = StringBuilder()
+    val lines = text.split("\n")
+        .map { it.trim() }
+    val maxLength = lines.maxBy { it.length }!!.length
+    for (string in lines) {
+        for (i in 0 until (maxLength - string.length) / 2) line.append(" ")
+        line.append(string, "\n")
+    }
+    output.write(line.toString())
+    output.close()
 }
 
 /**
@@ -183,7 +192,6 @@ fun top20Words(inputName: String): Map<String, Int> {
             res2 += max
             res -= max.first
             count++
-            if (count == 20) break
         }
     } else return res
     return res2
