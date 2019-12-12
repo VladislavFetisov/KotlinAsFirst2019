@@ -378,44 +378,48 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var countDash = 0
     var countStars = 0
     var cDB = 0 //count Double Stars
-    for (string in lines) {
-        if (string.isEmpty()) line.append("</p>", "<p>")
-        var i = 0
-        while (i < string.length) {
-            if (string[i] == '~') {
-                if (i + 1 < string.length && string[i + 1] == '~') {
-                    if (countDash == 0) {
-                        line.append("<s>")
-                        countDash++
-                    } else if (countDash == 1) {
-                        line.append("</s>")
-                        countDash--
+    for (k in lines.indices) {
+        if (lines[k].isEmpty()) {
+            if (k != 0 && lines[k - 1].isNotEmpty()) line.append("</p>")
+            if (k + 1 < lines.size && lines[k + 1].isNotEmpty()) line.append("<p>")
+        } else {
+            var i = 0
+            while (i < lines[k].length) {
+                if (lines[k][i] == '~') {
+                    if (i + 1 < lines[k].length && lines[k][i + 1] == '~') {
+                        if (countDash == 0) {
+                            line.append("<s>")
+                            countDash++
+                        } else if (countDash == 1) {
+                            line.append("</s>")
+                            countDash--
+                        }
                     }
                 }
-            }
-            if (string[i] == '*') {
-                if (i + 1 < string.length && string[i + 1] == '*') {
-                    if (cDB == 0) {
-                        line.append("<b>")
-                        cDB++
-                        i += 1
-                    } else if (cDB == 1) {
-                        line.append("</b>")
-                        cDB--
-                        i += 1
-                    }
-                } else {
-                    if (countStars == 0) {
-                        line.append("<i>")
-                        countStars++
-                    } else if (countStars == 1) {
-                        line.append("</i>")
-                        countStars--
+                if (lines[k][i] == '*') {
+                    if (i + 1 < lines[k].length && lines[k][i + 1] == '*') {
+                        if (cDB == 0) {
+                            line.append("<b>")
+                            cDB++
+                            i += 1
+                        } else if (cDB == 1) {
+                            line.append("</b>")
+                            cDB--
+                            i += 1
+                        }
+                    } else {
+                        if (countStars == 0) {
+                            line.append("<i>")
+                            countStars++
+                        } else if (countStars == 1) {
+                            line.append("</i>")
+                            countStars--
+                        }
                     }
                 }
+                if (lines[k][i] != '~' && lines[k][i] != '*') line.append(lines[k][i])
+                i++
             }
-            if (string[i] != '~' && string[i] != '*') line.append(string[i])
-            i++
         }
     }
     output.write(line.append("</p>", "</body>", "</html>").toString())
