@@ -422,7 +422,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
         }
     }
-    if (lines[lines.size - 1].isNotEmpty()) line.append("</p>")
+    if (lines.isEmpty() || lines[lines.size - 1].isNotEmpty()) line.append("</p>")
     output.write(line.append("</body>", "</html>").toString())
     output.close()
 }
