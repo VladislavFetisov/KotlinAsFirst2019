@@ -242,11 +242,11 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     if (!description.matches(Regex("""([^\s;]+ \d+(\.\d+)?; )*([^\s;]+ \d+(\.\d+)?)"""))) return ""
-    val line = description.split(";")
-    var z =Double.NEGATIVE_INFINITY
+    val line = description.split("; ")
+    var z = Double.NEGATIVE_INFINITY
     var res = ""
     for (i in line) {
-        val k = i.trim().split(" ")
+        val k = i.split(" ")
         if (k[1].toDouble() > z) {
             res = k[0]
             z = k[1].toDouble()
@@ -267,8 +267,8 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом\\
  */
 fun fromRoman(roman: String): Int {
-    if (roman.isEmpty() || !roman.
-            matches(Regex("""M*(CM|DC{0,3}|CD|C{1,3})?(XC|LX{0,3}|XL|X{1,3})?(IX|VI{0,3}|IV|I{1,3})?"""))) return -1
+    if (roman.isEmpty() ||
+        !roman.matches(Regex("""M*(CM|DC{0,3}|CD|C{1,3})?(XC|LX{0,3}|XL|X{1,3})?(IX|VI{0,3}|IV|I{1,3})?"""))) return -1
     var res = 0
     val numbers = mapOf(
         "M" to 1000, "D" to 500, "C" to 100, "L" to 50, "X" to 10, "V" to 5, "I" to 1
@@ -327,44 +327,56 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    var indexChar = 0
-    var countCommands = 0
-    val list = mutableListOf<Int>()
-    var value = cells / 2
-    var bracketsInString = 0
-    for (i in 0..cells) list.add(0)
-    while (indexChar < commands.length && countCommands < limit) {
-        when (commands[indexChar]) {
-            '+' -> list[value]++
-            '>' -> value++
-            '-' -> list[value]--
-            '<' -> value--
-        }
-        if (commands[indexChar] == '[' && list[value] == 0) {
-            for (i in (indexChar + 1) until commands.length) {
-                if (commands[i] == '[') bracketsInString++
-                if (commands[i] == ']') bracketsInString--
-                if (bracketsInString == -1) {
-                    bracketsInString++
-                    indexChar += i + 1
-                    break
-                }
-            }
-        }
-        if (commands[indexChar] == ']' && list[value] != 0) {
-            for (i in indexChar - 1 downTo 0) {
-                if (commands[i] == '[') bracketsInString--
-                if (commands[i] == ']') bracketsInString++
-                if (bracketsInString == -1) {
-                    bracketsInString++
-                    indexChar -= i + 1
-                    break
-                }
-            }
-        }
-        indexChar++
-        countCommands++
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+/*var indexChar = 0
+var countCommands = 0
+val list = mutableListOf<Int>()
+var value = cells / 2
+var bracketsInString = 0
+for (i in 0..cells) list.add(0)
+while (indexChar < commands.length && countCommands < limit) {
+    when (commands[indexChar]) {
+        '+' -> list[value]++
+        '>' -> value++
+        '-' -> list[value]--
+        '<' -> value--
     }
-    return list
+    if (commands[indexChar] == '[' && list[value] == 0) {
+        for (i in (indexChar + 1) until commands.length) {
+            if (commands[i] == '[') bracketsInString++
+            if (commands[i] == ']') bracketsInString--
+            if (bracketsInString == -1) {
+                bracketsInString++
+                indexChar += i + 1
+                break
+            }
+        }
+    }
+    if (commands[indexChar] == ']' && list[value] != 0) {
+        for (i in indexChar - 1 downTo 0) {
+            if (commands[i] == '[') bracketsInString--
+            if (commands[i] == ']') bracketsInString++
+            if (bracketsInString == -1) {
+                bracketsInString++
+                indexChar -= i + 1
+                break
+            }
+        }
+    }
+    indexChar++
+    countCommands++
 }
+return list
+}
+
+fun bestRes(examResults: List<String>, treshold: Double): Map<String, Double> {
+for (i in examResults) require(Regex("""[А-я]+ - ([А-я] [3-5],?)+""").matches(i))
+val a = mutableMapOf<String, Double>()
+for (string in examResults) {
+    val nameAndDic = string.split(" - ")
+    val marks = string.split(Regex("""[^3-5]"""))
+        .filter { it != "" }
+    val midMark = marks.sumBy { it.toInt() } / marks.size.toDouble()
+    a[nameAndDic[0]] = midMark
+}
+return a.filter { it.value >= treshold }*/
