@@ -619,31 +619,32 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    val output = File(outputName).bufferedWriter()
-    val string = StringBuilder()
-    val c = mutableListOf<Int>()
-    var count = 0
-    var firstNum = lhv
-    string.append(" ", lhv, " ", "|", " ", rhv, "\n-")
-    while (firstNum != 0) {
-        c += firstNum % 10
-        firstNum /= 10
-    }
-    for (i in c.reversed()) {
-        if (i + count * 10 >= rhv || lhv < rhv) {
-            count = count * 10 + i
-            val k = count - count % rhv
-            string.append(k)
-            for (j in 0 until c.size - digitNumber(count) + 3) string.append(" ")
-            string.append(lhv / rhv, "\n")
-            for (z in 0..digitNumber(k)) string.append("-") //Потому как есть знак "минус"
-            string.append("\n")
-            break
-        }
-        count = count * 10 + i
-    }
-    output.write(string.toString())
-    output.close()
+    TODO()
 }
+/*val output = File(outputName).bufferedWriter()
+val string = StringBuilder()
+val c = mutableListOf<Int>()
+var count = 0
+var firstNum = lhv
+string.append(" ", lhv, " ", "|", " ", rhv, "\n-")
+while (firstNum != 0) {
+    c += firstNum % 10
+    firstNum /= 10
+}
+for (i in c.reversed()) {
+    if (i + count * 10 >= rhv || lhv < rhv) {
+        count = count * 10 + i
+        val k = count - count % rhv
+        string.append(k)
+        for (j in 0 until c.size - digitNumber(count) + 3) string.append(" ")
+        string.append(lhv / rhv, "\n")
+        for (z in 0..digitNumber(k)) string.append("-") //Потому как есть знак "минус"
+        string.append("\n")
+        break
+    }
+    count = count * 10 + i
+}
+output.write(string.toString())
+output.close()*/
 
 
