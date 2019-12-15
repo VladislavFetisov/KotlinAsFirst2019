@@ -422,7 +422,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
         }
     }
-    output.write(line.append("</p>", "</body>", "</html>").toString())
+    if (lines[lines.size - 1].isNotEmpty()) line.append("</p>")
+    output.write(line.append("</body>", "</html>").toString())
     output.close()
 }
 
