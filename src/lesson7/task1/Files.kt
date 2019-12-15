@@ -380,7 +380,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var cDB = 0 //count Double Stars
     var openP = 1
     for (k in lines.indices) {
-        if (lines[k].isEmpty() && openP == 1) {
+        if (lines[k].isEmpty() && openP == 1 && k != 0 && lines[k - 1].isNotEmpty()) {
             line.append("</p>")
             openP = 0
         } else {
