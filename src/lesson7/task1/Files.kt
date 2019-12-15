@@ -378,15 +378,18 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var countDash = 0
     var countStars = 0
     var cDB = 0 //count Double Stars
+    var openP = 1
     for (k in lines.indices) {
-        if (lines[k].isEmpty()) {
-            if (k != 0 && lines[k - 1].isNotEmpty()) {
-                line.append("</p>")
-                if (k + 1 < lines.size && lines[k + 1].isNotEmpty()) line.append("<p>")
-            }
+        if (lines[k].isEmpty() && openP == 1) {
+            line.append("</p>")
+            openP = 0
         } else {
             var i = 0
             while (i < lines[k].length) {
+                if (openP == 0) {
+                    line.append("<p>")
+                    openP = 1
+                }
                 if (lines[k][i] == '~') {
                     if (i + 1 < lines[k].length && lines[k][i + 1] == '~') {
                         if (countDash == 0) {
@@ -424,7 +427,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
         }
     }
-    if (lines.isEmpty() || lines[lines.size - 1].isNotEmpty()) line.append("</p>")
+    if (openP == 1) line.append("</p>")
     output.write(line.append("</body>", "</html>").toString())
     output.close()
 }
@@ -616,6 +619,31 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val output = File(outputName).bufferedWriter()
+    val string = StringBuilder()
+    val c = mutableListOf<Int>()
+    var count = 0
+    var firstNum = lhv
+    string.append(" ", lhv, " ", "|", " ", rhv, "\n-")
+    while (firstNum != 0) {
+        c += firstNum % 10
+        firstNum /= 10
+    }
+    for (i in c.reversed()) {
+        if (i + count * 10 >= rhv || lhv < rhv) {
+            count = count * 10 + i
+            val k = count - count % rhv
+            string.append(k)
+            for (j in 0 until c.size - digitNumber(count) + 3) string.append(" ")
+            string.append(lhv / rhv, "\n")
+            for (z in 0..digitNumber(k)) string.append("-") //Потому как есть знак "минус"
+            string.append("\n")
+            break
+        }
+        count = count * 10 + i
+    }
+    output.write(string.toString())
+    output.close()
 }
+
 
