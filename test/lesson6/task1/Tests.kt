@@ -163,7 +163,8 @@ class Tests {
         assertThrows(IllegalStateException::class.java) { computeDeviceCells(20, ">>>>>>>>>>>>>", 12) }
         assertEquals(listOf(0), computeDeviceCells(1, "", 500))
         assertThrows(IllegalStateException::class.java) { computeDeviceCells(2, ">", 12) }
-    }
+        assertEquals(listOf(0), computeDeviceCells(1, "[]", 500))
+}
 
     /*@Test
     fun bestRes() {

@@ -327,7 +327,7 @@ fun fromRoman(roman: String): Int {
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    require(Regex("""[+\->< ]*(\[[+\->< \[\]]+])*""").matches(commands))
+    require(Regex("""[+\->< ]*(\[[+\->< \[\]]*])*""").matches(commands))
     var indexChar = 0
     var countCommands = 0
     val list = mutableListOf<Int>()
