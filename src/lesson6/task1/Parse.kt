@@ -267,7 +267,8 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом\\
  */
 fun fromRoman(roman: String): Int {
-    if (roman.isEmpty() || !roman.matches(Regex("""M*(CM|DC{0,3}|CD|C{1,3})?(XC|LX{0,3}|XL|X{1,3})?(IX|VI{0,3}|IV|I{1,3})?"""))) return -1
+    if (roman.isEmpty() ||
+        !roman.matches(Regex("""M*(CM|DC{0,3}|CD|C{1,3})?(XC|LX{0,3}|XL|X{1,3})?(IX|VI{0,3}|IV|I{1,3})?"""))) return -1
     var res = 0
     val numbers = mapOf(
         "M" to 1000, "D" to 500, "C" to 100, "L" to 50, "X" to 10, "V" to 5, "I" to 1
@@ -327,12 +328,19 @@ fun fromRoman(roman: String): Int {
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    require(Regex("""[+\->< ]*(\[[+\->< \[\]]*])*""").matches(commands))
+    require(Regex("""[+\-<>\[\] ]*""").matches(commands))
     var indexChar = 0
     var countCommands = 0
     val list = mutableListOf<Int>()
     var value = cells / 2
     var bracket = 1
+    for (command in commands) {
+        when (command) {
+            '[' -> bracket++
+            ']' -> bracket--
+        }
+    }
+    require(bracket == 1)
     for (i in 0 until cells) list.add(0)
     if (commands.isNotEmpty()) {
         while (indexChar < commands.length && countCommands < limit) {
