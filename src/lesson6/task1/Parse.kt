@@ -328,48 +328,51 @@ fun fromRoman(roman: String): Int {
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    require(Regex("""[+\->< ]+(\[[+\->< \[\]]+])*""").matches(commands))
+    require(Regex("""[+\->< ]*(\[[+\->< \[\]]+])*""").matches(commands))
     var indexChar = 0
     var countCommands = 0
     val list = mutableListOf<Int>()
     var value = cells / 2
     var bracket = 1
     for (i in 0 until cells) list.add(0)
-    while (indexChar < commands.length && countCommands < limit) {
-        when (commands[indexChar]) {
-            '+' -> list[value]++
-            '>' -> value++
-            '-' -> list[value]--
-            '<' -> value--
-        }
-        if (commands[indexChar] == '[' && list[value] == 0) {
-            for (i in (indexChar + 1) until commands.length) {
-                if (commands[i] == '[') bracket++
-                if (commands[i] == ']') bracket--
-                if (bracket == 0) {
-                    indexChar += i - indexChar
-                    bracket = 1
-                    break
+    if (commands.isNotEmpty()) {
+        while (indexChar < commands.length && countCommands < limit) {
+            when (commands[indexChar]) {
+                '+' -> list[value]++
+                '>' -> value++
+                '-' -> list[value]--
+                '<' -> value--
+            }
+            if (commands[indexChar] == '[' && list[value] == 0) {
+                for (i in (indexChar + 1) until commands.length) {
+                    if (commands[i] == '[') bracket++
+                    if (commands[i] == ']') bracket--
+                    if (bracket == 0) {
+                        indexChar += i - indexChar
+                        bracket = 1
+                        break
+                    }
                 }
             }
-        }
-        if (commands[indexChar] == ']' && list[value] != 0) {
-            for (i in (indexChar - 1) downTo 0) {
-                if (commands[i] == '[') bracket++
-                if (commands[i] == ']') bracket--
-                if (bracket == 2) {
-                    indexChar -= indexChar - i
-                    bracket = 1
-                    break
+            if (commands[indexChar] == ']' && list[value] != 0) {
+                for (i in (indexChar - 1) downTo 0) {
+                    if (commands[i] == '[') bracket++
+                    if (commands[i] == ']') bracket--
+                    if (bracket == 2) {
+                        indexChar -= indexChar - i
+                        bracket = 1
+                        break
+                    }
                 }
             }
+            if (indexChar + 1 < commands.length &&
+                (value == 0 && commands[indexChar + 1] == '<' || value == cells - 1 && commands[indexChar + 1] == '>')) {
+                throw IllegalStateException()
+            }
+            indexChar++
+            countCommands++
         }
-        if (indexChar + 1 < commands.length &&
-            (value == 0 && commands[indexChar + 1] == '<' || value == cells - 1 && commands[indexChar + 1] == '>')) {
-            throw IllegalStateException()
-        }
-        indexChar++
-        countCommands++
+
     }
     return list
 }
