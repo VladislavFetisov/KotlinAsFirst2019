@@ -374,14 +374,37 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     return list
 }
 
-fun bestRes(examResults: List<String>, treshold: Double): Map<String, Double> {
-for (i in examResults) require(Regex("""[А-я]+ - ([А-я] [3-5],?)+""").matches(i))
-val a = mutableMapOf<String, Double>()
-for (string in examResults) {
-    val nameAndDic = string.split(" - ")
-    val marks = string.split(Regex("""[^3-5]"""))
-        .filter { it != "" }
-    val midMark = marks.sumBy { it.toInt() } / marks.size.toDouble()
-    a[nameAndDic[0]] = midMark
+/*fun bestRes(examResults: List<String>, treshold: Double): Map<String, Double> {
+    val a = mutableMapOf<String, Double>()
+    for (string in examResults) {
+        require(Regex("""[А-я]+ [А-я]+ - ([А-я]+ [3-5],?)+""").matches(string))
+        val nameAndDic = string.split(" - ")
+        val marks = string.split(Regex("""[^3-5]"""))
+            .filter { it != "" }
+        val midMark = marks.sumBy { it.toInt() } / marks.size.toDouble()
+        a[nameAndDic[0]] = midMark
+    }
+    return a.filter { it.value >= treshold }
 }
-return a.filter { it.value >= treshold }*/
+
+fun myFun(text: String): List<String> {
+    val res = mutableListOf<String>()
+    val map = mutableMapOf<String, List<Int>>()
+    if (!Regex("""([A-z0-9]+ \d+:\d+\n?)+""").matches(text)) return listOf()
+    val list = text.split("\n")
+    for (i in list) {
+        val time = i.split(" ")
+        val time1 = time[1].split(":")
+        val time2 = time1[0].toInt() * 60 + time1[1].toInt()
+        if (time[0] in map) map[time[0]] = map[time[0]]!!.plus(time2)
+        else map[time[0]] = mutableListOf(time2)
+    }
+    for ((key, value) in map) {
+        if (value.size != 1) {
+            for (i in value.indices) {
+                for (j in i + 1 until value.size - 1) if (i + 1 < value.size && kotlin.math.abs(value[i] - value[i + 1]) < 2) res += key
+            }
+        }
+    }
+    return res
+}*/

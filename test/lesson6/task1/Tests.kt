@@ -163,4 +163,23 @@ class Tests {
         assertThrows(IllegalStateException::class.java) { computeDeviceCells(20, ">>>>>>>>>>>>>", 12) }
     }
 
+    /*@Test
+    fun bestRes() {
+        assertEquals(
+            mapOf("Петров Василий" to 4.0, "Человек Разумный" to 4.0),
+            bestRes(listOf("Петров Василий - Математика 3,Физика 5", "Человек Разумный - Русский 4"), 4.0)
+        )
+        assertThrows(IllegalArgumentException::class.java) { bestRes(listOf("Петров Василий"), 5.0) }
+    }
+
+    @Test
+    fun myFun() {
+        assertEquals(listOf<String>(), myFun("Nagibator1992 10:05\nAlesha 9:56\nMasya 11:44"))
+        assertEquals(
+            listOf("Nagibator,Masya"),
+            myFun("Nagibator1992 10:05\nAlesha 9:56\nMasya 11:44\nNagibator1992 10:03\nMasya 11:42")
+        )
+        assertEquals(listOf<String>(), myFun("Nagibator1992 10:05\nAlesha 9:56\nMasya11:44"))
+    }*/
+
 }
