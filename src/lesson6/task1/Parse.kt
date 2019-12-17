@@ -327,46 +327,51 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
-/*var indexChar = 0
-var countCommands = 0
-val list = mutableListOf<Int>()
-var value = cells / 2
-var bracketsInString = 0
-for (i in 0..cells) list.add(0)
-while (indexChar < commands.length && countCommands < limit) {
-    when (commands[indexChar]) {
-        '+' -> list[value]++
-        '>' -> value++
-        '-' -> list[value]--
-        '<' -> value--
-    }
-    if (commands[indexChar] == '[' && list[value] == 0) {
-        for (i in (indexChar + 1) until commands.length) {
-            if (commands[i] == '[') bracketsInString++
-            if (commands[i] == ']') bracketsInString--
-            if (bracketsInString == -1) {
-                bracketsInString++
-                indexChar += i + 1
-                break
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    require(Regex("""[+\->< ]+(\[[+\->< \[\]]+])*""").matches(commands))
+    var indexChar = 0
+    var countCommands = 0
+    val list = mutableListOf<Int>()
+    var value = cells / 2
+    var bracket = 1
+    for (i in 0 until cells) list.add(0)
+    while (indexChar < commands.length && countCommands < limit) {
+        when (commands[indexChar]) {
+            '+' -> list[value]++
+            '>' -> value++
+            '-' -> list[value]--
+            '<' -> value--
+        }
+        if (commands[indexChar] == '[' && list[value] == 0) {
+            for (i in (indexChar + 1) until commands.length) {
+                if (commands[i] == '[') bracket++
+                if (commands[i] == ']') bracket--
+                if (bracket == 0) {
+                    indexChar += i - indexChar
+                    bracket = 1
+                    break
+                }
             }
         }
-    }
-    if (commands[indexChar] == ']' && list[value] != 0) {
-        for (i in indexChar - 1 downTo 0) {
-            if (commands[i] == '[') bracketsInString--
-            if (commands[i] == ']') bracketsInString++
-            if (bracketsInString == -1) {
-                bracketsInString++
-                indexChar -= i + 1
-                break
+        if (commands[indexChar] == ']' && list[value] != 0) {
+            for (i in (indexChar - 1) downTo 0) {
+                if (commands[i] == '[') bracket++
+                if (commands[i] == ']') bracket--
+                if (bracket == 2) {
+                    indexChar -= indexChar - i
+                    bracket = 1
+                    break
+                }
             }
         }
+        if (indexChar + 1 < commands.length &&
+            (value == 0 && commands[indexChar + 1] == '<' || value == cells - 1 && commands[indexChar + 1] == '>')) {
+            throw IllegalStateException()
+        }
+        indexChar++
+        countCommands++
     }
-    indexChar++
-    countCommands++
-}
-return list
+    return list
 }
 
 fun bestRes(examResults: List<String>, treshold: Double): Map<String, Double> {
